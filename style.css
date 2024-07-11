@@ -1,0 +1,6 @@
+.status-bar0 {
+  background: #1e1e1e;
+  opacity: 0.7;
+  min-height: 30px; }
+  .status-bar0 .workspaces .workspace-buttons {
+    background-color: #ff0000; }
