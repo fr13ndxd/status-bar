@@ -4,7 +4,7 @@ use gtk4_layer_shell::{Edge, LayerShell};
 pub mod buttons;
 
 fn start() -> gtk4::Box {
-    let hbox = gtk4::Box::new(gtk4::Orientation::Horizontal, 5);
+    let hbox = gtk4::Box::new(gtk4::Orientation::Horizontal, 0);
     hbox.append(&buttons::workspaces());
 
     hbox
