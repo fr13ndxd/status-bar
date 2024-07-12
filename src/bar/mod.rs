@@ -6,6 +6,7 @@ pub mod buttons;
 fn start() -> gtk4::Box {
     let hbox = gtk4::Box::new(gtk4::Orientation::Horizontal, 0);
     hbox.append(&buttons::workspaces());
+    hbox.append(&buttons::active_app_label());
 
     hbox
 }

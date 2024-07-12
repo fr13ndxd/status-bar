@@ -1055,6 +1055,7 @@ dependencies = [
  "gtk4-layer-shell",
  "hyprland",
  "notify",
+ "serde_json",
  "tokio",
 ]
 
