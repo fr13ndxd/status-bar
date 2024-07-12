@@ -1,6 +1,4 @@
 use gtk4::gio;
-use gtk4::glib;
-use gtk4::glib::clone;
 use gtk4::prelude::*;
 use gtk4::Orientation;
 use gtk4::{Box, Label};
