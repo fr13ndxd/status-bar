@@ -6,5 +6,5 @@ Current status:
 
 
 TODO:
-[ ] make workspace widget better
-[ ] add more components similar to gnome-shell
+- [ ] make workspace widget better
+- [ ] add more components similar to gnome-shell
