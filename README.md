@@ -9,3 +9,22 @@ TODO:
 - [ ] make workspace widget better
 - [ ] add more components similar to gnome-shell
 - [ ] add css watcher
+
+
+## Instalation:
+### Home manager:
+- add status-bar to inputs:
+```nix
+inputs.status-bar.url = "github:fr13ndxd/status-bar";
+```
+- add status-bar to home-manager packages:
+```nix
+{ inputs, ...}:
+
+{
+  home.packages = [
+    inputs.status-bar.defaultPackage.${system}
+  ];
+}
+
+```
