@@ -1,15 +1,33 @@
-* {
-    all: unset;
-}
 
 .status-bar0 {
-    all: unset;
+    // all: unset;
     label {
         font-family: Ubuntu Nerd Font Regular;
     }
     background: #1e1e1e;
     opacity: 0.7;
     min-height: 30px;
+}
+
+.reveall {
+    background: red;
+    min-width: 200px;
+    min-height: 200px;
+}
+
+.datemenu {
+    background: #101010;
+    min-width: 200px;
+    min-height: 200px;
+    transition: height 0.5s ease-in-out;
+
+    revealer {
+       // background: transparent;
+    }
+
+    box {
+        background: #101010;
+    }
 }
 
 .workspaces {
@@ -20,17 +38,15 @@
         transition: 200ms;
         background-image: none;
         color: transparent;
-        min-width: 7px;
+        min-width: 6pt;
         border-radius: 10px;
         font-size: 0px;
-        margin: 11px 3px 11px 3px;
+        margin: 13px 2px 13px 2px;
     }
 
     .active {
         background-color: #F8EFF7;
-       // background-color: linear-gradient(to right, #8A858C, #7C7582);
-       // background: linear-gradient(to right, #8A858C, #7C7582);
-        min-width: 30px;
+        min-width: 20pt;
         background-image: none;
     }
 

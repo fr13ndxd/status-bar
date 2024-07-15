@@ -1,7 +1,6 @@
+use crate::options;
 use notify::{RecursiveMode, Result, Watcher};
 use std::path::Path;
-
-const SCSS_DIR: &'static str = "/home/fr13nd/Desktop/status-bar/style/main.scss";
 
 pub fn watch_css() -> Result<()> {
     // Automatically select the best implementation for your platform.
@@ -10,29 +9,24 @@ pub fn watch_css() -> Result<()> {
         Err(e) => println!("watch error: {:?}", e),
     })?;
 
-    watcher.watch(
-        Path::new("/home/fr13nd/Desktop/status-bar/style"),
-        RecursiveMode::Recursive,
-    )?;
+    watcher.watch(Path::new(options::CSS_DIRECTORY), RecursiveMode::Recursive)?;
 
     Ok(())
 }
 
 pub fn load_css() {
     let provider = gtk4::CssProvider::new();
-    let input_scss = SCSS_DIR;
     let output_css = "style.css";
 
-    println!("INFO: using scss file: {}", input_scss);
+    println!("INFO: using scss file: {}", options::CSS_DIRECTORY);
 
     std::process::Command::new("sassc")
-        .arg(&input_scss)
+        .arg(&options::CSS_DIRECTORY)
         .arg(&output_css)
         .status()
         .expect("Failed to run sassc");
 
     let css = std::fs::read_to_string(output_css).expect("Failed to read CSS file");
-    //provider.load_from_string(&css);
     provider.load_from_data(&css);
 
     gtk4::style_context_add_provider_for_display(

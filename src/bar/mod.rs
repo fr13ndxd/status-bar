@@ -1,3 +1,4 @@
+use crate::options;
 use gtk4::{prelude::*, Application};
 use gtk4_layer_shell::{Edge, LayerShell};
 
@@ -5,14 +6,18 @@ pub mod buttons;
 
 fn start() -> gtk4::Box {
     let hbox = gtk4::Box::new(gtk4::Orientation::Horizontal, 0);
-    hbox.append(&buttons::workspaces());
-    hbox.append(&buttons::active_app_label());
-
+    for w in options::bar_order("start") {
+        hbox.append(&w);
+    }
     hbox
 }
 
-fn center() -> gtk4::Label {
-    gtk4::Label::new(Some("center"))
+fn center() -> gtk4::Box {
+    let hbox = gtk4::Box::new(gtk4::Orientation::Horizontal, 0);
+    for w in options::bar_order("center") {
+        hbox.append(&w);
+    }
+    hbox
 }
 
 fn end() -> gtk4::Label {
@@ -35,7 +40,11 @@ pub fn bar(app: Application) -> gtk4::ApplicationWindow {
 
     window.auto_exclusive_zone_enable();
 
-    window.set_anchor(Edge::Top, true);
+    if options::BAR_POSITION == "top" {
+        window.set_anchor(Edge::Top, true);
+    } else {
+        window.set_anchor(Edge::Bottom, true);
+    }
     window.set_anchor(Edge::Left, true);
     window.set_anchor(Edge::Right, true);
 

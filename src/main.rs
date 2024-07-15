@@ -1,6 +1,9 @@
+use bar::buttons::datemenu::datemenu;
 use gtk4::prelude::*;
 
 mod bar;
+pub mod options;
+pub mod popup_window;
 mod utils;
 
 #[tokio::main]
@@ -11,6 +14,7 @@ async fn main() {
     app.connect_activate(|app| {
         bar::bar(app.clone()).present();
 
+        datemenu();
         utils::load_css();
     });
 

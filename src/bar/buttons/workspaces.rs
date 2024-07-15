@@ -1,3 +1,4 @@
+use fgl::widgets::WidgetOptions;
 use gtk4::gio;
 use gtk4::prelude::*;
 use gtk4::Orientation;
@@ -21,8 +22,6 @@ pub fn workspaces() -> gtk4::Box {
     });
 
     let hbox = Box::new(Orientation::Horizontal, 5);
-    hbox.set_hexpand(false);
-    hbox.set_vexpand(false);
     hbox.add_css_class("workspaces");
     let mut w_labels: Vec<gtk4::Label> = Vec::new();
 
@@ -35,28 +34,18 @@ pub fn workspaces() -> gtk4::Box {
     }
 
     let update_workspaces = move || {
-        //let workspaces = hyprland::data::Workspaces::get().unwrap();
         let workspaces = hyprland::data::Workspaces::get().unwrap();
+        let active_workspace = hyprland::data::Workspace::get_active().unwrap();
 
         for (i, label) in w_labels.iter().enumerate() {
-            let mut class_name = "";
-            match hyprland::data::Workspace::get_active() {
-                Ok(active_workspace) => {
-                    // Subtract 1 from the workspace ID to get the correct index
-                    if active_workspace.id == (i as i32 + 1) {
-                        class_name = "active";
-                    } else if workspaces
-                        .iter()
-                        .any(|ws| ws.id == (i as i32 + 1) && ws.windows > 0)
-                    {
-                        class_name = "occupied";
-                    }
-                }
-                Err(e) => {
-                    eprintln!("Error getting active workspace: {:?}", e);
-                }
-            }
-            label.set_css_classes(&[class_name, "w_label"]);
+            let is_active = active_workspace.id == (i as i32 + 1);
+            let is_occupied = workspaces
+                .iter()
+                .any(|ws| ws.id == (i as i32 + 1) && ws.windows > 0);
+
+            label.toggle_classname("active", is_active);
+            label.toggle_classname("occupied", !is_active && is_occupied);
+            label.add_css_class("w_label");
         }
     };
 

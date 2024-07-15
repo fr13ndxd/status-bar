@@ -1,7 +1,8 @@
 use active_app::active_app;
 
-mod active_app;
-mod workspaces;
+pub mod active_app;
+pub mod datemenu;
+pub mod workspaces;
 
 pub fn workspaces() -> gtk4::Box {
     workspaces::workspaces()
@@ -9,4 +10,8 @@ pub fn workspaces() -> gtk4::Box {
 
 pub fn active_app_label() -> gtk4::Box {
     active_app::active_app()
+}
+
+pub fn datemenu_button() -> gtk4::Box {
+    datemenu::datemenu_button()
 }
