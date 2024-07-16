@@ -1,32 +1,31 @@
-use gtk4::prelude::*;
 use gtk4::{prelude::*, Label, Orientation, Revealer};
-use gtk4_layer_shell::{Edge, LayerShell};
+use gtk4::{prelude::*, RevealerTransitionType};
+use gtk4_layer_shell::{Edge, KeyboardMode, LayerShell};
 
-use crate::popup_window::popup_revealer;
+use crate::popup_window::{self, popup_revealer};
 
-pub fn datemenu() -> gtk4::Window {
-    let window_content = gtk4::Box::new(gtk4::Orientation::Vertical, 5);
-    window_content.append(&gtk4::Label::new(Some("Hello, World!")));
+pub fn datemenu() -> (gtk4::Window, gtk4::Revealer) {
+    let hbox = gtk4::Box::new(Orientation::Horizontal, 5);
+    hbox.add_css_class("datemenu_box");
 
-    let popup_window = popup_revealer(
-        "Datemenu",
-        "slide_left",
-        &window_content.upcast::<gtk4::Widget>(),
-    );
+    let (window, revealer) = popup_revealer("datemenu", hbox);
 
-    popup_window
+    (window, revealer)
 }
 
 pub fn datemenu_button() -> gtk4::Box {
     let btn = gtk4::Button::new();
     btn.set_label("label");
-    let datemenu_window = datemenu();
+    let (datemenu_window, datemenu_revealer) = datemenu();
 
     btn.connect_clicked(move |_| {
-        if !datemenu_window.is_visible() {
-            datemenu_window.show();
-        } else {
+        let is_visible = datemenu_window.is_visible();
+        if is_visible {
             datemenu_window.hide();
+            datemenu_revealer.set_reveal_child(false);
+        } else {
+            datemenu_window.show();
+            datemenu_revealer.set_reveal_child(true);
         }
     });
 

@@ -16,17 +16,22 @@ pub fn watch_css() -> Result<()> {
 
 pub fn load_css() {
     let provider = gtk4::CssProvider::new();
-    let output_css = "style.css";
+    let output_css = "/tmp/status-bar/";
+    let output_file_css = "/tmp/status-bar/style.css";
 
     println!("INFO: using scss file: {}", options::CSS_DIRECTORY);
 
+    if !std::path::Path::new(output_css).exists() {
+        std::fs::create_dir(output_css).unwrap();
+    }
+
     std::process::Command::new("sassc")
         .arg(&options::CSS_DIRECTORY)
-        .arg(&output_css)
+        .arg(&output_file_css)
         .status()
         .expect("Failed to run sassc");
 
-    let css = std::fs::read_to_string(output_css).expect("Failed to read CSS file");
+    let css = std::fs::read_to_string(output_file_css).expect("Failed to read CSS file");
     provider.load_from_data(&css);
 
     gtk4::style_context_add_provider_for_display(

@@ -1,28 +1,36 @@
 use gtk4::prelude::*;
-use gtk4::{Box as GtkBox, Revealer, Widget, Window};
-use gtk4_layer_shell::LayerShell;
+use gtk4::{Box as GtkBox, Orientation, Revealer, RevealerTransitionType, Widget, Window};
+use gtk4_layer_shell::{Edge, KeyboardMode, LayerShell};
 
-pub fn popup_revealer(window_name: &str, transition: &str, child: &gtk4::Widget) -> gtk4::Window {
-    let revealer = Revealer::new();
-    revealer.set_transition_type(match transition {
-        "slide_left" => gtk4::RevealerTransitionType::SlideLeft,
-        "slide_right" => gtk4::RevealerTransitionType::SlideRight,
-        "slide_up" => gtk4::RevealerTransitionType::SlideUp,
-        "slide_down" => gtk4::RevealerTransitionType::SlideDown,
-        _ => gtk4::RevealerTransitionType::Crossfade, // Default transition type
-    });
+pub fn popup_revealer<C>(window_name: &str, child: C) -> (gtk4::Window, gtk4::Revealer)
+where
+    C: IsA<Widget>,
+{
+    child.add_css_class("content");
 
-    revealer.set_child(Some(child));
-    revealer.set_transition_duration(350);
+    let window = gtk4::Window::new();
+    window.add_css_class("popup_window");
+    window.init_layer_shell();
+    window.add_css_class(window_name);
+    window.set_namespace(window_name);
+    window.set_visible(false);
+    window.set_anchor(Edge::Right, true);
+    window.set_anchor(Edge::Bottom, true);
+    window.set_keyboard_mode(KeyboardMode::Exclusive);
 
-    let hbox = GtkBox::new(gtk4::Orientation::Horizontal, 5);
+    let revealer = gtk4::Revealer::new();
+    revealer.set_reveal_child(false);
+    revealer.set_child(Some(&child));
+    revealer.set_transition_duration(2000);
+    revealer.set_transition_type(RevealerTransitionType::SlideUp);
+
+    let hbox = gtk4::Box::new(Orientation::Horizontal, 5);
     hbox.append(&revealer);
 
-    let window = Window::new();
-    window.init_layer_shell();
-    window.set_title(Some(window_name));
-    window.set_default_size(400, 200);
-    window.set_child(Some(&hbox));
+    let overlay = gtk4::Overlay::new();
+    overlay.set_child(Some(&hbox));
 
-    window
+    window.set_child(Some(&overlay));
+
+    (window, revealer)
 }
