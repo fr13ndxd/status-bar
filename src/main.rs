@@ -1,4 +1,3 @@
-use bar::buttons::datemenu::datemenu;
 use gtk4::prelude::*;
 
 mod bar;
@@ -14,7 +13,6 @@ async fn main() {
     app.connect_activate(|app| {
         bar::bar(app.clone()).present();
 
-        datemenu();
         utils::load_css();
     });
 
