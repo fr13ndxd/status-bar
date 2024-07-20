@@ -36,7 +36,7 @@ pub fn bar(app: Application) -> gtk4::ApplicationWindow {
 
     window.set_child(Some(&widgets));
 
-    window.set_css_classes(&vec!["status-bar0"]);
+    window.set_css_classes(&vec!["status-bar"]);
 
     window.auto_exclusive_zone_enable();
 

@@ -1,26 +1,30 @@
+use crate::utils::current_date;
 use fgl::button::LabelPoll;
+use gtk4::gdk::Rectangle;
 use gtk4::{prelude::*, Label, Orientation, Revealer};
 use gtk4::{prelude::*, RevealerTransitionType};
 use gtk4_layer_shell::{Edge, KeyboardMode, LayerShell};
 
-//use crate::popup_window::PopupWindow;
+use crate::popup_window::popup_window;
 
-fn current_date() -> String {
-    let format = "%H:%M - %A %e.";
-    let now = chrono::Local::now();
-    let time = now.format(format).to_string();
+pub fn datemenu(btn: gtk4::Button) -> gtk4::Popover {
+    let calendar = gtk4::Calendar::new();
 
-    time
+    let hbox = gtk4::Box::new(Orientation::Horizontal, 5);
+    hbox.add_css_class("datemenu_content");
+    hbox.append(&calendar);
+
+    popup_window(hbox, "datemenu", btn)
 }
 
 pub fn datemenu_button() -> gtk4::Box {
     let btn = gtk4::Button::new();
     btn.add_css_class("datemenu_button");
     btn.watch(|| current_date());
+    let popover = datemenu(btn.clone());
 
     btn.connect_clicked(move |_| {
-        //  let datemenu = PopupWindow::new("datemenu".to_string(), 200, 200);
-        //  PopupWindow::show(&datemenu);
+        popover.popup();
     });
 
     let hbox = gtk4::Box::new(gtk4::Orientation::Horizontal, 0);

@@ -2,6 +2,14 @@ use crate::options;
 use notify::{RecursiveMode, Result, Watcher};
 use std::path::Path;
 
+pub fn current_date() -> String {
+    let format = "%H:%M - %A %e.";
+    let now = chrono::Local::now();
+    let time = now.format(format).to_string();
+
+    time
+}
+
 pub fn watch_css() -> Result<()> {
     // Automatically select the best implementation for your platform.
     let mut watcher = notify::recommended_watcher(|res| match res {

@@ -4,6 +4,8 @@ pub mod active_app;
 pub mod datemenu;
 pub mod workspaces;
 
+use datemenu::datemenu;
+
 pub fn workspaces() -> gtk4::Box {
     workspaces::workspaces()
 }
