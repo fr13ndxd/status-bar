@@ -1,4 +1,7 @@
-use crate::bar::buttons::{active_app::active_app, datemenu_button, workspaces::workspaces};
+use crate::bar::buttons::{
+    active_app::active_app, datemenu::datemenu_button, quicksettings::quicksettings_button,
+    workspaces::workspaces,
+};
 
 pub static CSS_DIRECTORY: &str = "/home/fr13nd/Desktop/status-bar/style/main.scss";
 
@@ -10,7 +13,7 @@ pub fn bar_order(part: &str) -> Vec<gtk4::Box> {
     match part {
         "start" => vec![workspaces(), active_app()],
         "center" => vec![datemenu_button()],
-        "end" => vec![],
+        "end" => vec![quicksettings_button()],
         _ => Vec::from([]),
     }
 }

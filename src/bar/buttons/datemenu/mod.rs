@@ -1,9 +1,6 @@
 use crate::utils::current_date;
-use fgl::button::LabelPoll;
-use gtk4::gdk::Rectangle;
-use gtk4::{prelude::*, Label, Orientation, Revealer};
-use gtk4::{prelude::*, RevealerTransitionType};
-use gtk4_layer_shell::{Edge, KeyboardMode, LayerShell};
+use fgl::button::ButtonOptions;
+use gtk4::{prelude::*, Orientation};
 
 use crate::popup_window::popup_window;
 

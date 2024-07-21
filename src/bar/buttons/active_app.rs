@@ -1,14 +1,9 @@
-use fgl::label::LabelPoll;
-use gtk4::gio;
+use fgl::label::LabelOptions;
 use gtk4::prelude::*;
 use gtk4::Label;
 use gtk4::Orientation;
 use hyprland::data::Client;
-use hyprland::prelude::HyprData;
 use hyprland::shared::HyprDataActiveOptional;
-use hyprland::shared::HyprError;
-use serde_json::Value;
-use tokio::sync::watch;
 
 fn get_active_app() -> String {
     let active = Client::get_active().ok().flatten();

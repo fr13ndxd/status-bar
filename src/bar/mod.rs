@@ -1,5 +1,5 @@
 use crate::options;
-use gtk4::{prelude::*, Application};
+use gtk4::{prelude::*, Application, Orientation};
 use gtk4_layer_shell::{Edge, LayerShell};
 
 pub mod buttons;
@@ -20,8 +20,12 @@ fn center() -> gtk4::Box {
     hbox
 }
 
-fn end() -> gtk4::Label {
-    gtk4::Label::new(Some("end"))
+fn end() -> gtk4::Box {
+    let hbox = gtk4::Box::new(Orientation::Horizontal, 0);
+    for w in options::bar_order("end") {
+        hbox.append(&w);
+    }
+    hbox
 }
 
 pub fn bar(app: Application) -> gtk4::ApplicationWindow {

@@ -22,12 +22,14 @@
             gtk4
             gtk4-layer-shell
             pkg-config
+            dbus
+            librsvg # librsvg makes svg icons load
           ];
         };
 
         # For `nix develop` (optional, can be skipped):
         devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ rustc cargo pkg-config gtk4-layer-shell gtk4 ];
+          nativeBuildInputs = with pkgs; [ rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
         };
       }
     );
