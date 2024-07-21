@@ -44,6 +44,8 @@
 
     .datemenu_button {
         all: unset;
+        border-radius: 8px;
+        margin: 2px;
 
         label {
             margin-left: 5px;
@@ -52,12 +54,28 @@
 
         &:hover {
             background-color: lighten(#1e1e1e, 12%);
-            border-radius: 8px;
-            margin: 5px;
         }
 
         font-family: Ubuntu Nerd Font Regular;
         font-weight: bold;
         font-size: 9pt;
+    }
+
+    .quicksettings_button {
+        all: unset;
+        border-radius: 8px;
+        margin: 2px;
+        padding: 5pt;
+        font-family: Ubuntu Nerd Font Regular;
+        font-weight: bold;
+        font-size: 9pt;
+
+        image {
+
+        }
+
+        &:hover {
+            background-color: lighten(#1e1e1e, 12%);
+        }
     }
 }
