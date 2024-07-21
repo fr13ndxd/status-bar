@@ -1,14 +1,16 @@
 ### Simple status bar written in rust and gtk4.
 
 Current status:
-![image](https://github.com/user-attachments/assets/47fd6a0b-841b-45d5-81a5-0ad95b0b39c0)
+![image](https://github.com/user-attachments/assets/50a6c6c8-2470-4421-8ff6-8f64b70f062d)
 
 
 
 TODO:
-- [ ] make workspace widget better
-- [ ] add more components similar to gnome-shell
 - [ ] add css watcher
+- [ ] quicksettings
+- [ ] system indicators (temps of different pc components (cpu, ssd...), battery details, ...)
+- [ ] clipboard manager
+- [ ] tray
 
 
 ## Instalation:
