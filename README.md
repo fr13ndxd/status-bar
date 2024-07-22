@@ -1,7 +1,7 @@
 ### Simple status bar written in rust and gtk4.
 
 Current status:
-![image](https://github.com/user-attachments/assets/50a6c6c8-2470-4421-8ff6-8f64b70f062d)
+![image](https://github.com/user-attachments/assets/972e38d2-1e8c-4487-917d-3ac17d77e4cf)
 
 
 
