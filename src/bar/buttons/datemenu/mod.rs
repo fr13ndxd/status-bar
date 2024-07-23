@@ -1,5 +1,5 @@
 use crate::utils::current_date;
-use fgl::button::ButtonOptions;
+use fgl::widgets::button::ButtonOptions;
 use gtk4::{prelude::*, Orientation};
 
 use crate::popup_window::popup_window;
@@ -17,7 +17,7 @@ pub fn datemenu(btn: gtk4::Button) -> gtk4::Popover {
 pub fn datemenu_button() -> gtk4::Box {
     let btn = gtk4::Button::new();
     btn.add_css_class("datemenu_button");
-    btn.watch(|| current_date());
+    btn.watch(1000, || current_date());
     let popover = datemenu(btn.clone());
 
     btn.connect_clicked(move |_| {

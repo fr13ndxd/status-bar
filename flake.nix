@@ -25,6 +25,10 @@
             dbus
             librsvg # librsvg makes svg icons load
           ];
+
+          propagatedBuildInputs = with pkgs; [
+            rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg
+          ];
         };
 
         # For `nix develop` (optional, can be skipped):
