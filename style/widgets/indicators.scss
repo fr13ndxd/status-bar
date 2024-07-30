@@ -1,0 +1,21 @@
+.indicators {
+    background: transparent;
+    margin: 10px;
+    border: red;
+    .indicators_content {
+        min-width: 200px;
+        min-height: 200px;
+    }
+
+    .temp_button_revealed {
+        image {
+            transition: transform 0.3s ease-in-out;
+            -gtk-icon-transform: rotate(90deg);
+        }
+    }
+
+    .indicator_revealer {
+        .indicator_label {
+        }
+    }
+}

@@ -29,6 +29,9 @@ pub fn workspaces() -> gtk4::Box {
         let str_i = i.to_string();
         let w_label = Label::new(Some(&str_i.as_str()));
 
+        w_label.set_vexpand(true);
+        w_label.set_valign(gtk4::Align::Center);
+
         hbox.append(&w_label);
         w_labels.push(w_label);
     }
