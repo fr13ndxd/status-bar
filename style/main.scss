@@ -5,3 +5,7 @@
 @import './mixins/button.scss';
 
 @import './variables.scss';
+
+image {
+    -gtk-icon-size: 15px;
+}

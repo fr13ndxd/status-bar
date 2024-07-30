@@ -222,7 +222,6 @@ checksum = "ff511d5dc435d703f4971bc399647c9bc38e20cb41452e3b9feb4765419ed3f3"
 [[package]]
 name = "fgl"
 version = "0.1.0"
-source = "git+https://github.com/fr13ndxd/fgl#a4df1dbd4d5034a1679180c7d8abe326f4186de3"
 dependencies = [
  "futures 0.3.30",
  "gtk4",

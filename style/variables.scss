@@ -1,15 +1,19 @@
 $bg: #151218;
 $fg: #e7e0e8;
+
 $primary-bg: #d6bbfb;
 $primary-fg: #3b255a;
 $error-bg: #ffb4ab;
 $error-fg: #690005;
+
 $scheme: dark;
+$shadows: true;
+
 $padding: 7pt;
 $spacing: 9pt;
 $radius: 9px;
 $transition: 200ms;
-$shadows: true;
+
 $widget-bg: transparentize(#e7e0e8, 0.94);
 $hover-bg: transparentize(#e7e0e8, 0.8460000000000001);
 $hover-fg: lighten(#e7e0e8, 8%);

@@ -10,7 +10,6 @@ fn sound_indicator() -> gtk4::Image {
     let icon = gtk4::Image::new();
 
     icon.watch(300, || audio::get_audio_icon());
-    icon.set_icon_size(IconSize::Normal);
 
     icon
 }
@@ -19,7 +18,6 @@ fn network_indicator() -> gtk4::Image {
     let icon = gtk4::Image::new();
 
     icon.watch(300, || network::get_icon_name());
-    icon.set_icon_size(IconSize::Normal);
 
     icon
 }

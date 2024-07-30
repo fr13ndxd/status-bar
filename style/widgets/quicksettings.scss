@@ -1,1 +1,32 @@
 @import '../mixins/button.scss';
+@import '../variables.scss';
+
+.quicksettings_window {
+    all:unset;
+    margin: 10px;
+    background: transparent;
+    min-height: 400px;
+    min-width: 300px;
+
+    contents {
+        all: unset;
+    }
+}
+
+.quicksettings {
+    background: $bg;
+    border-radius: $radius;
+
+    .header_button {
+        @include button;
+        margin: $spacing;
+        padding: $spacing / 1.5;
+    }
+
+    .sliders {
+        background: $widget-bg;
+        min-height: 50px;
+        margin: $spacing;
+        padding-left: $spacing;
+    }
+}

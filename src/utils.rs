@@ -1,6 +1,9 @@
 use crate::options;
+use gtk4::glib;
+use notify::Event;
 use notify::{RecursiveMode, Result, Watcher};
 use std::path::Path;
+use tokio::sync::watch;
 
 pub fn current_date() -> String {
     let format = "%H:%M - %A %e.";
