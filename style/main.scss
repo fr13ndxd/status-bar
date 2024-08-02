@@ -8,5 +8,6 @@
 @import './variables.scss';
 
 image {
-    -gtk-icon-size: 15px;
+    all: unset;
+    -gtk-icon-size: 14.5px;
 }

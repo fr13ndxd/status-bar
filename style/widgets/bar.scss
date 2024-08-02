@@ -7,6 +7,8 @@
         font-family: Ubuntu Nerd Font Regular;
     }
     background: transparentize($bg, 0.95);
+    margin-bottom: 1pt;
+    min-height: 30px;
 
     @if $floating {
         margin: 10px;
@@ -84,7 +86,8 @@
         all: unset;
         margin: 2px;
         border-radius: 8px;
-        padding: 5pt;
+        padding-left: 5pt;
+        padding-right: 5pt;
         font-family: Ubuntu Nerd Font Regular;
         font-weight: bold;
         font-size: 9pt;

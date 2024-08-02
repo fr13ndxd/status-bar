@@ -31,7 +31,10 @@ fn battery_indicator() -> gtk4::Box {
     hbox.append(&icon);
 
     let percent_l = gtk4::Label::new(None);
-    percent_l.watch(1000, || battery::get_battery_capacity().to_string());
+    percent_l.watch(1000, || {
+        format!("{}%", battery::get_battery_capacity().to_string())
+    });
+    hbox.append(&percent_l);
 
     hbox
 }
