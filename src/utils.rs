@@ -4,10 +4,10 @@ use std::path::Path;
 
 pub fn current_date() -> String {
     let format = "%H:%M - %A %e.";
-    let now = chrono::Local::now();
-    let time = now.format(format).to_string();
+    let now = gtk4::glib::DateTime::now_local();
+    let time = now.unwrap().format(format).unwrap();
 
-    time
+    time.to_string()
 }
 
 pub fn watch_css() -> Result<()> {
