@@ -2,7 +2,7 @@ use fgl::services::audio;
 use fgl::widgets::icon::IconOptions;
 use gtk4::prelude::*;
 use gtk4::Box;
-use gtk4::{IconSize, Orientation};
+use gtk4::Orientation;
 
 use fgl::services::network;
 

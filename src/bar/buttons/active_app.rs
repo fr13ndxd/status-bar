@@ -25,7 +25,7 @@ pub fn active_app() -> gtk4::Box {
 
     let active_app_label = Label::new(None);
 
-    active_app_label.watch(5, || get_active_app());
+    active_app_label.watch(100, || get_active_app());
 
     active_app_label.add_css_class("active-app-label");
     hbox.append(&active_app_label);

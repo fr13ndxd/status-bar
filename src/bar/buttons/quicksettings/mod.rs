@@ -10,6 +10,7 @@ pub fn quicksettings_button() -> gtk4::Box {
     btn.add_css_class("quicksettings_button");
 
     let _hbox = gtk4::Box::new(Orientation::Horizontal, 0);
+
     let popover = quicksettings(btn.clone());
 
     btn.set_child(Some(&systemindicators()));

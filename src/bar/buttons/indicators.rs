@@ -1,4 +1,3 @@
-use crate::popup_window::popup_window;
 use fgl::widgets::label::LabelOptions;
 use gtk4::prelude::*;
 use gtk4::Box;

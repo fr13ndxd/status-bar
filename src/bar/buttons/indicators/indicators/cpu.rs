@@ -1,5 +1,5 @@
-use fgl::widgets::{button::ButtonOptions, label::LabelOptions, WidgetOptions};
-use gtk4::{ffi::gtk_text_new, prelude::*, Box, Button, CenterBox, Image, Label, Revealer};
+use fgl::widgets::{label::LabelOptions, WidgetOptions};
+use gtk4::{prelude::*, Box, Button, CenterBox, Image, Label, Revealer};
 
 pub fn get_nth_cpu_temp(x: i32) -> String {
     for i in 1..=10 {

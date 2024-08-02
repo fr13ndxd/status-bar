@@ -18,22 +18,13 @@
         # For `nix build` & `nix run`:
         defaultPackage = naersk'.buildPackage {
           src = ./.;
-          buildInputs = with pkgs; [
-            gtk4
-            gtk4-layer-shell
-            pkg-config
-            dbus
-            librsvg # librsvg makes svg icons load
-          ];
-
-          propagatedBuildInputs = with pkgs; [
-            rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg
-          ];
+          buildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
+          nativebuildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
         };
 
         # For `nix develop` (optional, can be skipped):
         devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
+          nativeBuildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
         };
       }
     );
