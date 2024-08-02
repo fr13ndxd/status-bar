@@ -18,8 +18,7 @@
         # For `nix build` & `nix run`:
         defaultPackage = naersk'.buildPackage {
           src = ./.;
-          buildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
-          nativebuildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
+          buildInputs = with pkgs; [ wrapGAppsHook4 rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
         };
 
         # For `nix develop` (optional, can be skipped):
