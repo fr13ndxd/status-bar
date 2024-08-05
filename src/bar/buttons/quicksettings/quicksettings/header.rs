@@ -3,11 +3,10 @@ use gtk4::Box;
 use gtk4::Orientation;
 
 fn settings_button() -> gtk4::Button {
-    let btn = gtk4::Button::new();
+    let btn = gtk4::Button::from_icon_name("org.gnome.Settings-system-symbolic");
     btn.set_hexpand(true);
     btn.set_halign(gtk4::Align::End);
     btn.set_css_classes(&["header_button", "settings_button"]);
-    btn.set_icon_name("org.gnome.Settings-system-symbolic");
     btn.connect_clicked(|_| {
         // TODO: make settings btn run settings
     });

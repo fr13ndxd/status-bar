@@ -30,8 +30,11 @@ fn end() -> gtk4::Box {
 
 pub fn bar(app: Application) -> gtk4::ApplicationWindow {
     let window = gtk4::ApplicationWindow::builder().application(&app).build();
+
     window.init_layer_shell();
     window.set_namespace("status-bar");
+    window.set_css_classes(&vec!["status-bar"]);
+    window.auto_exclusive_zone_enable();
 
     let widgets = gtk4::CenterBox::new();
     widgets.set_start_widget(Some(&start()));
@@ -40,15 +43,12 @@ pub fn bar(app: Application) -> gtk4::ApplicationWindow {
 
     window.set_child(Some(&widgets));
 
-    window.set_css_classes(&vec!["status-bar"]);
-
-    window.auto_exclusive_zone_enable();
-
-    if options::BAR_POSITION == "top" {
-        window.set_anchor(Edge::Top, true);
-    } else {
-        window.set_anchor(Edge::Bottom, true);
+    match options::BAR_POSITION {
+        "top" => window.set_anchor(Edge::Top, true),
+        "bottom" => window.set_anchor(Edge::Bottom, true),
+        _ => (),
     }
+
     window.set_anchor(Edge::Left, true);
     window.set_anchor(Edge::Right, true);
 

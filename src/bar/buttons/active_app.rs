@@ -6,16 +6,14 @@ use hyprland::data::Client;
 use hyprland::shared::HyprDataActiveOptional;
 
 fn get_active_app() -> String {
-    let active = Client::get_active().ok().flatten();
-
-    if let Some(client) = active {
-        if let Some(index) = client.class.find('\0') {
-            client.class[0..index].to_string()
-        } else {
-            client.class.to_string()
-        }
-    } else {
-        String::from("Hyprland Desktop")
+    match Client::get_active().ok().flatten() {
+        Some(client) => client
+            .class
+            .split('\0')
+            .next()
+            .unwrap_or(&client.class)
+            .to_string(),
+        None => "Hyprland Desktop".to_string(),
     }
 }
 
@@ -24,11 +22,9 @@ pub fn active_app() -> gtk4::Box {
     hbox.add_css_class("active-apps");
 
     let active_app_label = Label::new(None);
-
+    active_app_label.add_css_class("active-app-label");
     active_app_label.watch(100, || get_active_app());
 
-    active_app_label.add_css_class("active-app-label");
     hbox.append(&active_app_label);
-
     hbox
 }

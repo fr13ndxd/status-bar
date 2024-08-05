@@ -4,10 +4,15 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+log = "0.4"
+simple_logger = "5"
 gtk4 = "0.8"
 gtk4-layer-shell = "0.3"
 notify = "6.1.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = "0.4"
 tokio = { version = "1", features = ["full"] }
-hyprland = "0.4.0-alpha.2"
+hyprland = { git = "https://github.com/hyprland-community/hyprland-rs" }
 fgl = { git = "https://github.com/fr13ndxd/fgl" }
 # fgl = { path = "../fgl/" }

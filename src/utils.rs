@@ -1,5 +1,6 @@
 use crate::options;
 use core::str;
+use log::{log, Level};
 use notify::{RecursiveMode, Result, Watcher};
 use std::{path::Path, process::Command};
 
@@ -11,7 +12,7 @@ pub fn exec(cmd: &str, args: Vec<&str>) -> String {
 }
 
 pub fn current_date() -> String {
-    let format = "%H:%M - %A %e.";
+    let format = options::TIME_FORMAT;
     let now = gtk4::glib::DateTime::now_local();
     let time = now.unwrap().format(format).unwrap();
 
@@ -30,16 +31,18 @@ pub fn watch_css() -> Result<()> {
     Ok(())
 }
 
+pub fn ensure_directory(path: &str) {
+    if !std::path::Path::new(path).exists() {
+        std::fs::create_dir_all(path).unwrap();
+    }
+}
+
 pub fn load_css() {
     let provider = gtk4::CssProvider::new();
     let output_css = "/tmp/status-bar/";
     let output_file_css = "/tmp/status-bar/style.css";
 
-    println!("INFO: using scss file: {}", options::CSS_DIRECTORY);
-
-    if !std::path::Path::new(output_css).exists() {
-        std::fs::create_dir(output_css).unwrap();
-    }
+    ensure_directory(output_css);
 
     let scss = exec("dart-sass", vec![&options::CSS_DIRECTORY, output_file_css]);
     if scss.contains("Warning") {
@@ -56,4 +59,6 @@ pub fn load_css() {
     );
 
     _ = watch_css();
+
+    log!(Level::Info, "using scss file: {}", options::CSS_DIRECTORY);
 }

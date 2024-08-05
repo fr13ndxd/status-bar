@@ -12,8 +12,8 @@ use indicators::indcators_win;
 fn cpu_temp() -> gtk4::Box {
     let hbox = Box::new(Orientation::Horizontal, 0);
 
-    let cpu_icon = Image::new();
-    cpu_icon.set_icon_name(Some("temperature-symbolic"));
+    let cpu_icon = Image::from_icon_name("temperature-symbolic");
+
     let cpu_label = Label::new(Some("0°C"));
     cpu_label.watch(4000, || indicators::cpu::get_cpu_temp());
 
@@ -27,18 +27,17 @@ pub fn indicators_button() -> gtk4::Box {
     let indicator_btn = Button::new();
     indicator_btn.add_css_class("indicators_button");
 
-    let win = indcators_win(indicator_btn.clone());
-    indicator_btn.connect_clicked(move |_| {
-        win.show();
-    });
+    let indicators_box = gtk4::Box::new(Orientation::Horizontal, 0);
+    indicators_box.add_css_class("indicators_bar");
+    indicators_box.append(&cpu_temp());
 
-    let hbox = gtk4::Box::new(Orientation::Horizontal, 0);
-    hbox.add_css_class("indicators_bar");
+    indicator_btn.set_child(Some(&indicators_box));
 
-    hbox.append(&cpu_temp());
+    let container_box = gtk4::Box::new(Orientation::Horizontal, 0);
+    container_box.append(&indicator_btn);
 
-    indicator_btn.set_child(Some(&hbox));
-    let b = gtk4::Box::new(Orientation::Horizontal, 0);
-    b.append(&indicator_btn);
-    b
+    let indicator_window = indcators_win(indicator_btn.clone());
+    indicator_btn.connect_clicked(move |_| indicator_window.show());
+
+    container_box
 }

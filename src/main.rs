@@ -1,4 +1,6 @@
 use gtk4::prelude::*;
+use log::{log, Level};
+use simple_logger::SimpleLogger;
 use std::env::{args, Args};
 
 mod bar;
@@ -23,6 +25,12 @@ fn handle_args(args: Args) {
 
 #[tokio::main]
 async fn main() {
+    SimpleLogger::new()
+        .with_level(log::LevelFilter::Info)
+        .init()
+        .unwrap();
+    let start = std::time::Instant::now();
+
     let args_count = args().count();
     if args_count != 1 {
         handle_args(args());
@@ -32,10 +40,20 @@ async fn main() {
     let _ = gtk4::init();
     let app = gtk4::Application::new(Some("com.fr13nd.status-bar"), Default::default());
 
-    app.connect_activate(|app| {
+    app.connect_activate(move |app| {
         bar::bar(app.clone()).present();
+        let bar_loaded = start.elapsed().as_millis();
 
         utils::load_css();
+        let scss_loaded = start.elapsed().as_millis() - bar_loaded;
+
+        log!(
+            Level::Info,
+            "Bar loaded in {}ms (Scss took {}ms, {}ms total)",
+            bar_loaded,
+            scss_loaded,
+            scss_loaded + bar_loaded
+        );
     });
 
     app.run();
