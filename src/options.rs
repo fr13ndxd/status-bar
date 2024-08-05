@@ -11,7 +11,7 @@ pub static BAR_POSITION: &str = "top"; // top, bottom
 pub fn bar_order(part: &str) -> Vec<gtk4::Box> {
     // change order of items in bar
     match part {
-        "start" => vec![workspaces(), active_app()],
+        "start" => vec![workspaces() /*, active_app()*/],
         "center" => vec![datemenu_button()],
         "end" => vec![indicators_button(), quicksettings_button()],
         _ => Vec::from([]),
