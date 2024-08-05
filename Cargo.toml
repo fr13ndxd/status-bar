@@ -13,6 +13,6 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 chrono = "0.4"
 tokio = { version = "1", features = ["full"] }
-hyprland = { git = "https://github.com/hyprland-community/hyprland-rs" }
+hyprland = "0.4.0-alpha.2"
 fgl = { git = "https://github.com/fr13ndxd/fgl", branch = "main" }
 # fgl = { path = "../fgl/" }
