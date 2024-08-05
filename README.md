@@ -1,9 +1,11 @@
 ### Simple status bar written in rust and gtk4.
 
 Current status:
-![image](https://github.com/user-attachments/assets/972e38d2-1e8c-4487-917d-3ac17d77e4cf)
+![image](https://github.com/user-attachments/assets/7b14d74c-6f6d-4442-a61f-8732bb87bba3)
 
 
+known-issues:
+- active-app doesnt work for some reason
 
 TODO:
 - [ ] add css watcher
