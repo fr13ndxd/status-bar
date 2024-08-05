@@ -14,5 +14,5 @@ serde_json = "1.0"
 chrono = "0.4"
 tokio = { version = "1", features = ["full"] }
 hyprland = { git = "https://github.com/hyprland-community/hyprland-rs" }
-fgl = { git = "https://github.com/fr13ndxd/fgl" }
+fgl = { git = "https://github.com/fr13ndxd/fgl", branch = "main" }
 # fgl = { path = "../fgl/" }
