@@ -23,7 +23,7 @@
 
         # For `nix develop` (optional, can be skipped):
         devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
+          nativeBuildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg dart-sass ];
         };
       }
     );

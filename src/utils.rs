@@ -1,6 +1,14 @@
 use crate::options;
+use core::str;
 use notify::{RecursiveMode, Result, Watcher};
-use std::path::Path;
+use std::{path::Path, process::Command};
+
+pub fn exec(cmd: &str, args: Vec<&str>) -> String {
+    let c = Command::new(cmd).args(args).output().unwrap().stdout;
+    let res = String::from_utf8_lossy(&c);
+
+    res.to_string()
+}
 
 pub fn current_date() -> String {
     let format = "%H:%M - %A %e.";
@@ -33,11 +41,10 @@ pub fn load_css() {
         std::fs::create_dir(output_css).unwrap();
     }
 
-    std::process::Command::new("sassc")
-        .arg(&options::CSS_DIRECTORY)
-        .arg(&output_file_css)
-        .status()
-        .expect("Failed to run sassc");
+    let scss = exec("dart-sass", vec![&options::CSS_DIRECTORY, output_file_css]);
+    if scss.contains("Warning") {
+        println!("{}", scss);
+    }
 
     let css = std::fs::read_to_string(output_file_css).expect("Failed to read CSS file");
     provider.load_from_data(&css);
