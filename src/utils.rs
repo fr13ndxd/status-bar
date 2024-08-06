@@ -1,15 +1,8 @@
-use crate::options::{self, CSS_DIR};
-use core::str;
-use gtk4::{StyleContext, StyleProvider};
-use log::{log, Level};
-use notify::recommended_watcher;
-use notify::{Error, Event, RecursiveMode, Result, Watcher};
+use crate::options;
+use notify::{RecursiveMode, Watcher};
 use notify_debouncer_full::new_debouncer;
 use notify_debouncer_full::DebounceEventResult;
-use std::sync::mpsc::channel;
-use std::thread;
 use std::{path::Path, process::Command};
-use tokio::time::sleep;
 use tokio::time::Duration;
 
 pub fn exec(cmd: &str, args: Vec<&str>) -> String {
@@ -44,13 +37,13 @@ pub fn watch_css() {
             Duration::from_millis(20),
             None,
             move |result: DebounceEventResult| match result {
-                Ok(events) => tx.send(()).unwrap(),
+                Ok(_) => tx.send(()).unwrap(),
                 Err(_) => (),
             },
         )
         .unwrap();
 
-        debouncer
+        let _ = debouncer
             .watcher()
             .watch(Path::new(options::CSS_DIR), RecursiveMode::Recursive);
 
