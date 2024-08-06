@@ -31,8 +31,7 @@ gio::glib::MainContext::default().spawn_local(async move {
 pub fn watch_css() {
     let (tx, mut rx) = tokio::sync::watch::channel(());
     tokio::spawn(async move {
-        //let mut debouncer = new_debouncer(Duration::from_secs(2), None, tx)?;
-
+        tx.send(()).unwrap();
         let mut debouncer = new_debouncer(
             Duration::from_millis(20),
             None,
