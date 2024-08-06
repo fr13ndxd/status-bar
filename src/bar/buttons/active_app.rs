@@ -1,4 +1,4 @@
-use fgl::widgets::label::LabelOptions;
+use gtk4::gio::glib::MainContext;
 use gtk4::prelude::*;
 use gtk4::Label;
 use gtk4::Orientation;
@@ -26,7 +26,7 @@ pub fn active_app() -> gtk4::Box {
     active_app_label.add_css_class("active-app-label");
     hbox.append(&active_app_label.clone());
 
-    gtk4::gio::glib::MainContext::default().spawn_local(async move {
+    MainContext::default().spawn_local(async move {
         let mut event_listener = EventListener::new();
 
         event_listener.add_active_window_change_handler(move |data| {
