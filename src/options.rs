@@ -3,6 +3,7 @@ use crate::bar::buttons::{
     quicksettings::quicksettings_button, workspaces::workspaces,
 };
 
+pub static CSS_DIR: &str = "/home/fr13nd/Desktop/status-bar/style";
 pub static CSS_DIRECTORY: &str = "/home/fr13nd/Desktop/status-bar/style/main.scss";
 
 // bar settings

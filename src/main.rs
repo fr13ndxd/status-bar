@@ -29,7 +29,7 @@ async fn main() {
         .with_level(log::LevelFilter::Info)
         .init()
         .unwrap();
-    let start = std::time::Instant::now();
+    let start = std::time::Instant::now(); // start time of this program
 
     let args_count = args().count();
     if args_count != 1 {
@@ -42,10 +42,12 @@ async fn main() {
 
     app.connect_activate(move |app| {
         bar::bar(app.clone()).present();
-        let bar_loaded = start.elapsed().as_millis();
+        let bar_loaded = start.elapsed().as_millis(); // bar() function load entire bar
 
         utils::load_css();
-        let scss_loaded = start.elapsed().as_millis() - bar_loaded;
+        utils::watch_css();
+        let scss_loaded = start.elapsed().as_millis() - bar_loaded; // load_css() loads scss/css
+        log!(Level::Info, "using scss file: {}", options::CSS_DIRECTORY);
 
         log!(
             Level::Info,
