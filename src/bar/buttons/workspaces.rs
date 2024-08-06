@@ -1,5 +1,4 @@
 use crate::id_to_i32;
-use crate::utils;
 use fgl::widgets::WidgetOptions;
 use gtk4::gio;
 use gtk4::prelude::*;
@@ -10,13 +9,12 @@ use hyprland::event_listener::EventListener;
 use hyprland::shared::HyprData;
 use hyprland::shared::HyprDataActive;
 use hyprland::shared::*;
-use tokio::sync::watch;
 
-fn update_workspaces(id: i32, wlabels: &Vec<Label>) {
+pub fn update_workspaces(id: i32, wlabels: &Vec<Label>) {
     let workspaces = hyprland::data::Workspaces::get().unwrap();
 
     for (i, label) in wlabels.iter().enumerate() {
-        let is_active = id as i32 == (i as i32 + 1);
+        let is_active = id == (i as i32 + 1);
         let is_occupied = workspaces
             .iter()
             .any(|ws| ws.id == (i as i32 + 1) && ws.windows > 0);
@@ -48,8 +46,9 @@ pub fn workspaces() -> gtk4::Box {
         let id = hyprland::data::Workspace::get_active().unwrap().id;
         update_workspaces(id, &w_labels);
         event_listener.add_workspace_change_handler(move |id| {
-            let id = id_to_i32!(id).unwrap();
-            update_workspaces(id, &w_labels);
+            if let Some(id) = id_to_i32!(id) {
+                update_workspaces(id, &w_labels);
+            }
         });
         event_listener.start_listener_async().await.unwrap();
     });
