@@ -5,6 +5,16 @@ use notify_debouncer_full::DebounceEventResult;
 use std::{path::Path, process::Command};
 use tokio::time::Duration;
 
+#[macro_export]
+macro_rules! id_to_i32 {
+    ($workspace:expr) => {
+        match $workspace {
+            WorkspaceType::Regular(s) => s.parse::<i32>().ok(),
+            _ => None,
+        }
+    };
+}
+
 pub fn exec(cmd: &str, args: Vec<&str>) -> String {
     let c = Command::new(cmd).args(args).output().unwrap().stdout;
     let res = String::from_utf8_lossy(&c);
@@ -19,14 +29,6 @@ pub fn current_date() -> String {
 
     time.to_string()
 }
-
-/*
-gio::glib::MainContext::default().spawn_local(async move {
-    loop {
-        let _ = rx.changed().await;
-        update_workspaces();
-    }
-});*/
 
 pub fn watch_css() {
     let (tx, mut rx) = tokio::sync::watch::channel(());

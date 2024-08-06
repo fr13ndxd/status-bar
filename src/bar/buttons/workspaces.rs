@@ -1,29 +1,35 @@
+use crate::id_to_i32;
+use crate::utils;
 use fgl::widgets::WidgetOptions;
 use gtk4::gio;
 use gtk4::prelude::*;
 use gtk4::Box;
+use gtk4::Label;
 use gtk4::Orientation;
+use hyprland::event_listener::EventListener;
 use hyprland::shared::HyprData;
 use hyprland::shared::HyprDataActive;
+use hyprland::shared::*;
 use tokio::sync::watch;
 
-pub fn workspaces() -> gtk4::Box {
-    let (tx, mut rx) = watch::channel(hyprland::data::Workspace::get_active().unwrap().id);
-    tokio::spawn(async move {
-        let mut last_active_workspace = hyprland::data::Workspace::get_active().unwrap().id;
-        let _ = tx.send(last_active_workspace.clone());
-        loop {
-            let active_workspace = hyprland::data::Workspace::get_active().unwrap().id;
-            if active_workspace != last_active_workspace {
-                let _ = tx.send(active_workspace.clone());
-                last_active_workspace = active_workspace;
-            }
-            tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
-        }
-    });
+fn update_workspaces(id: i32, wlabels: &Vec<Label>) {
+    let workspaces = hyprland::data::Workspaces::get().unwrap();
 
+    for (i, label) in wlabels.iter().enumerate() {
+        let is_active = id as i32 == (i as i32 + 1);
+        let is_occupied = workspaces
+            .iter()
+            .any(|ws| ws.id == (i as i32 + 1) && ws.windows > 0);
+
+        label.toggle_classname("active", is_active);
+        label.toggle_classname("occupied", !is_active && is_occupied);
+    }
+}
+
+pub fn workspaces() -> gtk4::Box {
     let hbox = Box::new(Orientation::Horizontal, 5);
     hbox.add_css_class("workspaces");
+
     let w_labels: Vec<gtk4::Label> = (1..=7)
         .map(|_| {
             let label = gtk4::Label::new(None);
@@ -36,26 +42,16 @@ pub fn workspaces() -> gtk4::Box {
         })
         .collect();
 
-    let update_workspaces = move || {
-        let workspaces = hyprland::data::Workspaces::get().unwrap();
-        let active_workspace = hyprland::data::Workspace::get_active().unwrap().id;
-
-        for (i, label) in w_labels.iter().enumerate() {
-            let is_active = active_workspace == (i as i32 + 1);
-            let is_occupied = workspaces
-                .iter()
-                .any(|ws| ws.id == (i as i32 + 1) && ws.windows > 0);
-
-            label.toggle_classname("active", is_active);
-            label.toggle_classname("occupied", !is_active && is_occupied);
-        }
-    };
-
     gio::glib::MainContext::default().spawn_local(async move {
-        loop {
-            let _ = rx.changed().await;
-            update_workspaces();
-        }
+        let mut event_listener = EventListener::new();
+
+        let id = hyprland::data::Workspace::get_active().unwrap().id;
+        update_workspaces(id, &w_labels);
+        event_listener.add_workspace_change_handler(move |id| {
+            let id = id_to_i32!(id).unwrap();
+            update_workspaces(id, &w_labels);
+        });
+        event_listener.start_listener_async().await.unwrap();
     });
 
     hbox
