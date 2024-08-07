@@ -241,12 +241,14 @@ checksum = "ff511d5dc435d703f4971bc399647c9bc38e20cb41452e3b9feb4765419ed3f3"
 [[package]]
 name = "fgl"
 version = "0.1.0"
-source = "git+https://github.com/fr13ndxd/fgl?branch=main#b4fded0a04a0c0d291a72ced0a460daab51bde06"
+source = "git+https://github.com/fr13ndxd/fgl#0638081dfe48ae4f00e2f03b74d4d791b4d56f33"
 dependencies = [
  "futures 0.3.30",
  "gtk4",
  "gtk4-layer-shell",
  "network-manager",
+ "notify",
+ "notify-debouncer-full",
  "tokio",
 ]
 
@@ -985,6 +987,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "notify-debouncer-mini"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5d40b221972a1fc5ef4d858a2f671fb34c75983eb385463dff3780eeff6a9d43"
+dependencies = [
+ "crossbeam-channel",
+ "log 0.4.22",
+ "notify",
+]
+
+[[package]]
 name = "num-conv"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1342,6 +1355,7 @@ dependencies = [
  "log 0.4.22",
  "notify",
  "notify-debouncer-full",
+ "notify-debouncer-mini",
  "serde",
  "serde_json",
  "simple_logger",

@@ -1,8 +1,6 @@
-use fgl::services::audio;
-use fgl::services::battery;
-use fgl::services::network;
+use fgl::services::{audio, network};
+use fgl::services::{battery::battery_icon_changed, battery::battery_percent_changed};
 use fgl::widgets::icon::IconOptions;
-use fgl::widgets::label::LabelOptions;
 use gtk4::prelude::*;
 use gtk4::Box;
 use gtk4::Image;
@@ -20,15 +18,21 @@ where
 fn battery_indicator() -> gtk4::Box {
     let hbox = Box::new(Orientation::Horizontal, 2);
 
-    let icon = create_icon_indicator(|| battery::get_battery_icon());
-
+    let icon = gtk4::Image::new();
     let percent_l = gtk4::Label::new(None);
-    percent_l.watch(1000, || {
-        format!("{}%", battery::get_battery_capacity().to_string())
-    });
 
     hbox.append(&icon);
     hbox.append(&percent_l);
+
+    battery_icon_changed(move |icon_name| {
+        icon.set_icon_name(Some(&icon_name));
+    });
+
+    battery_percent_changed(move |percent| {
+        let percent = format!("{}%", percent);
+        percent_l.set_label(percent.as_str());
+    });
+
     hbox
 }
 
