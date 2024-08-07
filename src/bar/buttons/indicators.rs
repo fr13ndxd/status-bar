@@ -1,4 +1,3 @@
-use fgl::widgets::label::LabelOptions;
 use gtk4::prelude::*;
 use gtk4::Box;
 use gtk4::Button;
@@ -13,12 +12,14 @@ fn cpu_temp() -> gtk4::Box {
     let hbox = Box::new(Orientation::Horizontal, 0);
 
     let cpu_icon = Image::from_icon_name("temperature-symbolic");
+    hbox.append(&cpu_icon);
 
     let cpu_label = Label::new(Some("0°C"));
-    cpu_label.watch(4000, || indicators::cpu::get_cpu_temp());
-
-    hbox.append(&cpu_icon);
     hbox.append(&cpu_label);
+
+    fgl::services::cpu::cpu_temp_changed(move |temp| {
+        cpu_label.set_label(temp.as_str());
+    });
 
     hbox
 }

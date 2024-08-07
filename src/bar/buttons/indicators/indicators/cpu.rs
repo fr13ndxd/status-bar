@@ -1,3 +1,4 @@
+use fgl::services::cpu::cpu_temp_changed;
 use fgl::widgets::{label::LabelOptions, WidgetOptions};
 use gtk4::{prelude::*, Box, Button, CenterBox, Image, Label, Revealer};
 use std::fmt::Write;
@@ -15,25 +16,6 @@ pub fn get_nth_cpu_temp(sensor_id: i32) -> String {
             result
         }
         Err(_) => String::new(),
-    }
-}
-
-pub fn get_cpu_temp() -> String {
-    let temps: Vec<f64> = (1..=10)
-        .filter_map(|i| {
-            let path = format!("/sys/class/thermal/thermal_zone{}/temp", i);
-            fs::read_to_string(&path)
-                .ok()
-                .and_then(|temp| temp.trim().parse::<f64>().ok())
-                .map(|temp| temp / 1000.0)
-        })
-        .collect();
-
-    if temps.is_empty() {
-        String::new()
-    } else {
-        let average_temp = temps.iter().sum::<f64>() / temps.len() as f64;
-        format!("{:.1}°C", average_temp)
     }
 }
 
@@ -65,12 +47,9 @@ pub fn cpu_temp_box() -> gtk4::Box {
 
     let revealer = revealer();
     vbox.append(&revealer);
-
     let icon = Image::new();
     icon.set_icon_name(Some("temperature-symbolic"));
-
-    let label = Label::new(Some("0°C"));
-    label.watch(4000, || get_cpu_temp());
+    let label = Label::new(None);
 
     let btn = Button::new();
     btn.set_icon_name("go-next-symbolic");
@@ -83,6 +62,10 @@ pub fn cpu_temp_box() -> gtk4::Box {
     cbox.set_start_widget(Some(&icon));
     cbox.set_center_widget(Some(&label));
     cbox.set_end_widget(Some(&btn));
+
+    cpu_temp_changed(move |temp| {
+        label.set_label(temp.as_str());
+    });
 
     vbox
 }
