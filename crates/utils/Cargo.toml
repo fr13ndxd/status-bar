@@ -1,0 +1,12 @@
+[package]
+name = "utils"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gtk4 = "0.8"
+hyprland = "0.4.0-alpha.2"
+
+
+[lints]
+workspace = true

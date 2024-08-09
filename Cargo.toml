@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/status-bar",
+  "crates/services",
+  "crates/bar"
+, "crates/utils"]
+
+default-members = ["crates/status-bar"]
+
+[workspace.lints.clippy]
+dbg_macro = "allow"
+todo = "allow"

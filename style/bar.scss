@@ -1,0 +1,36 @@
+@import './mixins/label.scss';
+@import './variables.scss';
+
+.status-bar {
+    all: unset;
+    @include label;
+    background: transparentize($bg, 0.95);
+    min-height: 30px;
+
+    .workspaces {
+        margin-left: 1px;
+        padding-left: 10px;
+        .w_label {
+            all:unset;
+            background-color: transparentize($fg, .8);
+            color: transparent;
+            opacity: 0.9;
+
+            margin-left: $spacing/4;
+            min-height: 6pt;
+            min-width: 6pt;
+            border-radius: 10px;
+            font-size: 0px;
+            transition: 200ms;
+        }
+
+        .active {
+            background-image: $active-gradient;
+            min-width: 20pt;
+        }
+
+        .occupied {
+            background-color: transparentize($fg, .2);
+        }
+    }
+}

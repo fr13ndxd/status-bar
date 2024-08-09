@@ -1,0 +1,15 @@
+[package]
+name = "bar"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gtk4 = "0.8"
+gtk4-layer-shell = "0.3"
+tokio = { version = "1.39", features = ["full"] }
+hyprland = "0.4.0-alpha.2"
+services = { path = "../services" }
+utils = { path = "../utils" }
+
+[lints]
+workspace = true
