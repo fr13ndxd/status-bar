@@ -25,12 +25,20 @@
         }
 
         .active {
-            background-image: $active-gradient;
+            background: $active-gradient;
             min-width: 20pt;
         }
 
         .occupied {
             background-color: transparentize($fg, .2);
+        }
+    }
+
+    .active-app-box {
+        all: unset;
+        .activeapp-label {
+            @include label;
+            margin-left: 10px;
         }
     }
 }

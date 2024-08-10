@@ -1,9 +1,14 @@
 use gtk4::prelude::*;
-use gtk4::{glib::MainContext, Orientation};
+use gtk4::Orientation;
 use gtk4::{Box, Label};
-use hyprland::data::{Workspace, Workspaces};
+use hyprland::data::Workspace;
+use hyprland::data::Workspaces;
 use hyprland::event_listener::EventListener;
-use hyprland::shared::{HyprData, HyprDataActive};
+use hyprland::shared::HyprDataActive;
+use std::sync::mpsc;
+
+use hyprland::shared::{HyprData, WorkspaceType};
+
 use utils::*;
 
 fn update_workspaces(id: i32, labels: &Vec<Label>) {
@@ -36,15 +41,26 @@ pub fn workspaces() -> gtk4::Box {
         })
         .collect();
 
-    MainContext::default().spawn_local(async {
-        let id = Workspace::get_active().unwrap().id;
-        update_workspaces(id, &w_labels);
+    let (tx, rx) = mpsc::channel();
 
-        let mut event_listener = EventListener::new();
-        event_listener.add_workspace_change_handler(move |id| {
-            update_workspaces(id_to_i32(id), &w_labels);
+    std::thread::spawn(move || {
+        let mut listener = EventListener::new();
+        listener.add_workspace_change_handler(move |id| {
+            tx.send(match id {
+                WorkspaceType::Regular(s) => s.parse().ok().unwrap(),
+                _ => 0,
+            })
+            .unwrap();
         });
-        event_listener.start_listener_async().await.unwrap();
+        listener.start_listener().unwrap();
+    });
+
+    update_workspaces(Workspace::get_active().unwrap().id, &w_labels);
+    gtk4::glib::source::idle_add_local(move || {
+        if let Ok(test) = rx.try_recv() {
+            update_workspaces(test, &w_labels);
+        }
+        gtk4::glib::ControlFlow::Continue
     });
 
     hbox

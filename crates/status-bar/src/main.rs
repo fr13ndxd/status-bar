@@ -8,7 +8,7 @@ mod style;
 #[tokio::main]
 async fn main() {
     SimpleLogger::new()
-        .with_level(log::LevelFilter::Info)
+        .with_level(log::LevelFilter::max())
         .init()
         .unwrap();
     let start = std::time::Instant::now();

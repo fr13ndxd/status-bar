@@ -3,6 +3,7 @@ use gtk4::Orientation::Horizontal;
 use gtk4::{prelude::*, Label};
 use gtk4::{ApplicationWindow, Box, CenterBox};
 use gtk4_layer_shell::{Edge, LayerShell};
+use start::activeapp::active_app;
 use start::workspaces::workspaces;
 
 mod start;
@@ -10,6 +11,7 @@ mod start;
 fn start() -> Box {
     let hbox = Box::new(Horizontal, 0);
     hbox.append(&workspaces());
+    hbox.append(&active_app());
 
     hbox
 }
