@@ -1,6 +1,6 @@
 todo:
 - [x] workspace widget
-- [ ] active app
+- [x] active app
 - [ ] datemenu button
 - [ ] temperatures
 - [ ] system indicators (quicksettings button)
