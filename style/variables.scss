@@ -1,12 +1,32 @@
 $bg: #151218;
 $fg: #e7e0e8;
 
-$font-size: 10pt;
+$primary-bg: #d6bbfb;
+$primary-fg: #3b255a;
+$error-bg: #ffb4ab;
+$error-fg: #690005;
 
+$scheme: dark;
+$shadows: true;
 
 $padding: 7pt;
 $spacing: 9pt;
 $radius: 9px;
 $transition: 200ms;
 
+$widget-bg: transparentize(#e7e0e8, 0.94);
+$hover-bg: transparentize(#e7e0e8, 0.8460000000000001);
+$hover-fg: lighten(#e7e0e8, 8%);
+$border-width: 0px;
+$border-color: transparentize(#958e99, 0.96);
+$border: $border-width solid $border-color;
 $active-gradient: linear-gradient(to right, #d6bbfb, darken(#d6bbfb, 4%));
+$shadow-color: rgba(0,0,0,.6);
+$text-shadow: 2pt 2pt 2pt $shadow-color;
+$box-shadow: 2pt 2pt 2pt 0 $shadow-color, inset 0 0 0 $border-width $border-color;
+$popover-border-color: transparentize(#958e99, 0.95);
+$popover-padding: $padding * 1.6;
+$popover-radius: $radius + $popover-padding;
+$font-size: 10pt;
+$font-name: Ubuntu Nerd Font;
+$hyprland-gaps-multiplier: 2.4;

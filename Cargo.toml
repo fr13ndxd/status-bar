@@ -2,9 +2,13 @@
 resolver = "2"
 members = [
   "crates/status-bar",
+
+  "crates/bar",
+  "crates/datemenu",
+
   "crates/services",
-  "crates/bar"
-, "crates/utils"]
+  "crates/utils"
+]
 
 default-members = ["crates/status-bar"]
 

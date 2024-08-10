@@ -2,6 +2,14 @@ use gtk4::prelude::WidgetExt;
 use hyprland::shared::WorkspaceType;
 use std::process::Command;
 
+pub fn current_date() -> String {
+    let format = "%H:%M - %A %e.";
+    let now = gtk4::glib::DateTime::now_local();
+    let time = now.unwrap().format(format).unwrap();
+
+    time.to_string()
+}
+
 pub fn id_to_i32(id: WorkspaceType) -> i32 {
     match id {
         hyprland::shared::WorkspaceType::Regular(s) => s

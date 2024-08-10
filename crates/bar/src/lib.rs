@@ -3,10 +3,11 @@ use gtk4::Orientation::Horizontal;
 use gtk4::{prelude::*, Label};
 use gtk4::{ApplicationWindow, Box, CenterBox};
 use gtk4_layer_shell::{Edge, LayerShell};
-use start::activeapp::active_app;
-use start::workspaces::workspaces;
+use modules::activeapp::active_app;
+use modules::date::datemenu;
+use modules::workspaces::workspaces;
 
-mod start;
+mod modules;
 
 fn start() -> Box {
     let hbox = Box::new(Horizontal, 0);
@@ -18,7 +19,7 @@ fn start() -> Box {
 
 fn center() -> Box {
     let hbox = Box::new(Horizontal, 0);
-    hbox.append(&Label::new(Some(&"center")));
+    hbox.append(&datemenu());
 
     hbox
 }

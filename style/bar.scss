@@ -1,4 +1,5 @@
 @import './mixins/label.scss';
+@import './mixins/button.scss';
 @import './variables.scss';
 
 .status-bar {
@@ -40,5 +41,14 @@
             @include label;
             margin-left: 10px;
         }
+    }
+
+    .datemenu-button {
+        all: unset;
+        @include button($flat: true, $focusable: false);
+        @include label;
+        font-weight: 600;
+        border-radius: 8px;
+        margin: 2px;
     }
 }
