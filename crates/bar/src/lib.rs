@@ -5,6 +5,7 @@ use gtk4::{ApplicationWindow, Box, CenterBox};
 use gtk4_layer_shell::{Edge, LayerShell};
 use modules::activeapp::active_app;
 use modules::date::datemenu;
+use modules::systemindicators::indicators;
 use modules::workspaces::workspaces;
 
 mod modules;
@@ -26,7 +27,7 @@ fn center() -> Box {
 
 fn end() -> Box {
     let hbox = Box::new(Horizontal, 0);
-    hbox.append(&Label::new(Some(&"end")));
+    hbox.append(&indicators());
 
     hbox
 }

@@ -1,1 +1,6 @@
 @import './bar.scss';
+
+image {
+    all: unset;
+    -gtk-icon-size: 14.5px;
+}
