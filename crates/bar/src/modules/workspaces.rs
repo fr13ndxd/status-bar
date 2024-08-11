@@ -6,8 +6,6 @@ use hyprland::data::Workspaces;
 use hyprland::event_listener::EventListener;
 use hyprland::shared::HyprDataActive;
 use std::sync::mpsc;
-use std::time::Duration;
-use tokio::time::sleep;
 
 use hyprland::shared::{HyprData, WorkspaceType};
 
@@ -59,6 +57,7 @@ pub fn workspaces() -> gtk4::Box {
 
     update_workspaces(Workspace::get_active().unwrap().id, &w_labels);
     gtk4::glib::source::idle_add_local(move || {
+        std::thread::sleep(std::time::Duration::from_millis(1));
         if let Ok(test) = rx.try_recv() {
             update_workspaces(test, &w_labels);
         }

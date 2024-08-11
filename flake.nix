@@ -18,6 +18,8 @@
         # For `nix build` & `nix run`:
         defaultPackage = naersk'.buildPackage {
           src = ./.;
+          name = "status-bar";
+          version = "0.1.0";
           buildInputs = with pkgs; [ wrapGAppsHook4 rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
         };
 

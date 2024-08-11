@@ -1,12 +1,9 @@
-use gtk4::Application;
-use gtk4::Orientation::Horizontal;
-use gtk4::{prelude::*, Label};
+use gtk4::{prelude::*, Application, Orientation::*};
 use gtk4::{ApplicationWindow, Box, CenterBox};
 use gtk4_layer_shell::{Edge, LayerShell};
-use modules::activeapp::active_app;
-use modules::date::datemenu;
-use modules::systemindicators::indicators;
-use modules::workspaces::workspaces;
+use modules::{
+    activeapp::active_app, date::datemenu, systemindicators::indicators, workspaces::workspaces,
+};
 
 mod modules;
 

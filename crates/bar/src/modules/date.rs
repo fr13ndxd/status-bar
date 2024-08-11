@@ -15,11 +15,12 @@ pub fn datemenu() -> Box {
     let (tx, rx) = mpsc::channel();
 
     thread::spawn(move || loop {
-        tx.send(current_date());
+        tx.send(current_date()).unwrap();
         thread::sleep(Duration::from_secs(30));
     });
 
     glib::source::idle_add_local(move || {
+        std::thread::sleep(std::time::Duration::from_millis(1));
         if let Ok(res) = rx.try_recv() {
             btn.set_label(&res);
         }

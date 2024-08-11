@@ -72,7 +72,7 @@ version = "0.1.0"
 dependencies = [
  "gtk4",
  "gtk4-layer-shell",
- "hyprland 0.4.0-alpha.2 (git+https://github.com/hyprland-community/hyprland-rs?branch=master)",
+ "hyprland",
  "services",
  "tokio",
  "utils",
@@ -122,9 +122,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.1.8"
+version = "1.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "504bdec147f2cc13c8b57ed9401fd8a147cc66b67ad5cb241394244f2c947549"
+checksum = "e9e8aabfac534be767c909e0690571677d49f41bd8465ae876fe043d52ba5292"
 
 [[package]]
 name = "cfg-expr"
@@ -618,25 +618,7 @@ checksum = "d627cd06fb3389f2554b7a4bb21db8c0bfca8863e6e653702cc4c6dbf20d8276"
 dependencies = [
  "ahash",
  "derive_more",
- "hyprland-macros 0.4.0-alpha.1",
- "num-traits",
- "once_cell",
- "paste",
- "regex",
- "serde",
- "serde_json",
- "serde_repr",
- "tokio",
-]
-
-[[package]]
-name = "hyprland"
-version = "0.4.0-alpha.2"
-source = "git+https://github.com/hyprland-community/hyprland-rs?branch=master#116305ab39c69b72e9f19162c4264dbec86be5dd"
-dependencies = [
- "ahash",
- "derive_more",
- "hyprland-macros 0.4.0-alpha.2",
+ "hyprland-macros",
  "num-traits",
  "once_cell",
  "paste",
@@ -652,15 +634,6 @@ name = "hyprland-macros"
 version = "0.4.0-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5dd8ce4c182ce77e485918f49262425ee51a2746fe97f14084869aeff2fbc38e"
-dependencies = [
- "quote",
- "syn",
-]
-
-[[package]]
-name = "hyprland-macros"
-version = "0.4.0-alpha.2"
-source = "git+https://github.com/hyprland-community/hyprland-rs?branch=master#116305ab39c69b72e9f19162c4264dbec86be5dd"
 dependencies = [
  "quote",
  "syn",
@@ -1012,18 +985,18 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "serde"
-version = "1.0.205"
+version = "1.0.206"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e33aedb1a7135da52b7c21791455563facbbcc43d0f0f66165b42c21b3dfb150"
+checksum = "5b3e4cd94123dd520a128bcd11e34d9e9e423e7e3e50425cb1b4b1e3549d0284"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.205"
+version = "1.0.206"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "692d6f5ac90220161d6774db30c662202721e64aed9058d2c394f451261420c1"
+checksum = "fabfb6138d2383ea8208cf98ccf69cdfb1aff4088460681d84189aa259762f97"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1137,9 +1110,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.72"
+version = "2.0.73"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc4b9b9bf2add8093d3f2c0204471e951b2285580335de42f9d2534f3ae7a8af"
+checksum = "837a7e8026c6ce912ff01cefbe8cafc2f8010ac49682e2a3d9decc3bce1ecaaf"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1313,7 +1286,7 @@ name = "utils"
 version = "0.1.0"
 dependencies = [
  "gtk4",
- "hyprland 0.4.0-alpha.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hyprland",
 ]
 
 [[package]]

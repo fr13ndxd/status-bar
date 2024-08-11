@@ -27,6 +27,7 @@ pub fn active_app() -> gtk4::Box {
     });
 
     gtk4::glib::source::idle_add_local(move || {
+        std::thread::sleep(std::time::Duration::from_millis(1));
         if let Ok(test) = rx.try_recv() {
             activeapp_label.set_label(test.as_str());
         }
