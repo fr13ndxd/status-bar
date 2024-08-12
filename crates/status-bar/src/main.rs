@@ -20,6 +20,7 @@ async fn main() {
         bar::bar(app.clone());
         let loaded = start.elapsed().as_millis();
 
+        log!(Level::Info, "temp dir: {:?}", utils::temp_dir());
         log!(Level::Info, "Loaded in {}ms", loaded)
     });
 

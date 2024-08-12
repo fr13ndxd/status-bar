@@ -5,8 +5,11 @@ edition = "2021"
 
 [dependencies]
 gtk4 = "0.8"
+# hyprland = { path = "/home/fr13nd/Desktop/hyprland-rs" }
+# hyprland = { git = "https://github.com/hyprland-community/hyprland-rs", branch = "master" }
 hyprland = "0.4.0-alpha.2"
-
+notify = "6.1"
+notify-debouncer-full = "0.3"
 
 [lints]
 workspace = true

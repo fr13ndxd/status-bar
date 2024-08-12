@@ -1,6 +1,7 @@
 use gtk4::{prelude::*, Application, Orientation::*};
 use gtk4::{ApplicationWindow, Box, CenterBox};
 use gtk4_layer_shell::{Edge, LayerShell};
+#[allow(unused_imports)]
 use modules::{
     activeapp::active_app, date::datemenu, systemindicators::indicators, workspaces::workspaces,
 };
@@ -10,7 +11,7 @@ mod modules;
 fn start() -> Box {
     let hbox = Box::new(Horizontal, 0);
     hbox.append(&workspaces());
-    hbox.append(&active_app());
+    // hbox.append(&active_app());
 
     hbox
 }

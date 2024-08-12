@@ -1,33 +1,42 @@
 use gtk4::gdk::Display;
 use gtk4::style_context_add_provider_for_display;
+use gtk4::CssProvider;
 use gtk4::STYLE_PROVIDER_PRIORITY_USER;
 use std::fs::read_to_string;
+use utils::file_changed;
 use utils::{ensure_directory, exec};
 
 pub fn load_css() {
-    let provider = gtk4::CssProvider::new();
     let output_css = "/tmp/status-bar/";
     let output_file_css = "/tmp/status-bar/style.css";
 
     ensure_directory(output_css);
 
-    let scss = exec(
-        "dart-sass",
-        vec![
-            &"/home/fr13nd/Desktop/status-bar/style/main.scss",
-            output_file_css,
-        ],
-    );
-    if scss.contains("Warning") {
-        println!("{}", scss);
-    }
+    file_changed(
+        "/home/fr13nd/Desktop/status-bar/style".to_string(),
+        move || {
+            let display = Display::default().expect("can't get display");
+            let provider = CssProvider::new();
 
-    let css = read_to_string(output_file_css).expect("Failed to read CSS file");
-    provider.load_from_data(&css);
+            let scss = exec(
+                "dart-sass",
+                vec![
+                    &"/home/fr13nd/Desktop/status-bar/style/main.scss",
+                    output_file_css,
+                ],
+            );
+            if scss.to_ascii_lowercase().contains("warning") {
+                println!("{}", scss);
+            }
 
-    style_context_add_provider_for_display(
-        &Display::default().expect("Could not connect to a display."),
-        &provider,
-        STYLE_PROVIDER_PRIORITY_USER,
+            let css = read_to_string(output_file_css).expect("Failed to read CSS file");
+            provider.load_from_data(css.as_str());
+
+            style_context_add_provider_for_display(
+                &display,
+                &provider,
+                STYLE_PROVIDER_PRIORITY_USER,
+            );
+        },
     );
 }

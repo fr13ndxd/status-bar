@@ -16,16 +16,22 @@ where
     std::thread::spawn(move || {
         let mut last_muted = is_muted();
         let mut last_volume = get_volume();
+        tx.send(AudioProps {
+            is_muted: last_muted,
+            volume: last_volume,
+            icon: get_audio_icon(),
+        })
+        .unwrap();
         loop {
             let current_muted = is_muted();
             let current_volume = get_volume();
             if last_muted != current_muted || last_volume != current_volume {
-                let props = AudioProps {
+                tx.send(AudioProps {
                     is_muted: current_muted,
                     volume: current_volume,
                     icon: get_audio_icon(),
-                };
-                tx.send(props).unwrap();
+                })
+                .unwrap();
                 last_muted = current_muted;
                 last_volume = current_volume;
             }

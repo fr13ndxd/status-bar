@@ -8,6 +8,7 @@ use hyprland::event_listener::EventListener;
 use hyprland::shared::HyprDataActiveOptional;
 use std::sync::mpsc;
 
+#[allow(dead_code)]
 pub fn active_app() -> gtk4::Box {
     let hbox = Box::new(Horizontal, 0);
     hbox.add_css_class("active-app-box");

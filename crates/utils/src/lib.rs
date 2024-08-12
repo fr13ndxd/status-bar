@@ -1,6 +1,8 @@
 use gtk4::prelude::WidgetExt;
 use hyprland::shared::WorkspaceType;
-use std::process::Command;
+use notify::Watcher;
+use std::path::Path;
+use std::{path::PathBuf, process::Command, time::Duration};
 
 pub fn current_date() -> String {
     let format = "%H:%M - %A %e.";
@@ -8,6 +10,10 @@ pub fn current_date() -> String {
     let time = now.unwrap().format(format).unwrap();
 
     time.to_string()
+}
+
+pub fn temp_dir() -> PathBuf {
+    gtk4::glib::tmp_dir().join(gtk4::glib::application_name().unwrap())
 }
 
 pub fn id_to_i32(id: WorkspaceType) -> i32 {
@@ -45,4 +51,45 @@ pub fn exec(cmd: &str, args: Vec<&str>) -> String {
     let res = String::from_utf8_lossy(&c);
 
     res.to_string()
+}
+
+pub fn file_changed<F>(file: String, callback: F)
+where
+    F: Fn() + 'static,
+{
+    let (tx, rx) = std::sync::mpsc::channel();
+
+    std::thread::spawn(move || {
+        use notify_debouncer_full::{new_debouncer, DebounceEventResult};
+        tx.send(()).unwrap();
+
+        let mut debouncer = new_debouncer(
+            Duration::from_millis(200),
+            None,
+            move |result: DebounceEventResult| match result {
+                Ok(_) => {
+                    tx.send(()).unwrap();
+                }
+                Err(_) => (),
+            },
+        )
+        .unwrap();
+
+        debouncer
+            .watcher()
+            .watch(Path::new(&file), notify::RecursiveMode::Recursive)
+            .unwrap();
+
+        loop {
+            std::thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    gtk4::glib::source::idle_add_local(move || {
+        std::thread::sleep(std::time::Duration::from_millis(1));
+        if let Ok(_) = rx.try_recv() {
+            callback();
+        }
+        gtk4::glib::ControlFlow::Continue
+    });
 }

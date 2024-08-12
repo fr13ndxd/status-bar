@@ -17,7 +17,7 @@
             color: transparent;
             opacity: 0.9;
 
-            margin-left: $spacing/4;
+            margin-left: calc($spacing / 4);
             min-height: 6pt;
             min-width: 6pt;
             border-radius: 10px;
