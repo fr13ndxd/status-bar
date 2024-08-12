@@ -93,3 +93,46 @@ where
         gtk4::glib::ControlFlow::Continue
     });
 }
+
+pub fn dirs_changed<F>(dirs: Vec<String>, callback: F)
+where
+    F: Fn() + 'static,
+{
+    let (tx, rx) = std::sync::mpsc::channel();
+
+    std::thread::spawn(move || {
+        use notify_debouncer_full::{new_debouncer, DebounceEventResult};
+        tx.send(()).unwrap();
+
+        let mut debouncer = new_debouncer(
+            Duration::from_millis(200),
+            None,
+            move |result: DebounceEventResult| match result {
+                Ok(_) => {
+                    tx.send(()).unwrap();
+                }
+                Err(_) => (),
+            },
+        )
+        .unwrap();
+
+        for dir in dirs {
+            debouncer
+                .watcher()
+                .watch(Path::new(&dir), notify::RecursiveMode::NonRecursive)
+                .unwrap();
+        }
+
+        loop {
+            std::thread::sleep(Duration::from_millis(1));
+        }
+    });
+
+    gtk4::glib::source::idle_add_local(move || {
+        std::thread::sleep(std::time::Duration::from_millis(1));
+        if let Ok(_) = rx.try_recv() {
+            callback();
+        }
+        gtk4::glib::ControlFlow::Continue
+    });
+}

@@ -7,6 +7,9 @@ edition = "2021"
 network-manager = "0.11"
 gtk4 = "0.8"
 tokio = { version = "1.39", features = ["full"] }
+utils = { path = "../utils" }
+notify = "6.1"
+notify-debouncer-full = "0.3"
 
 [lints]
 workspace = true

@@ -15,13 +15,12 @@ fn update_workspaces(id: i32, labels: &Vec<Label>) {
     let workspaces = Workspaces::get().unwrap();
 
     for (i, label) in labels.iter().enumerate() {
-        let is_active = id == (i as i32 + 1);
-        let is_occupied = workspaces
-            .iter()
-            .any(|ws| ws.id == (i as i32 + 1) && ws.windows > 0);
+        let i = i as i32 + 1;
+        let occupied = id != i && workspaces.iter().any(|ws| ws.id == i && ws.windows > 0);
+        let active = id == i && !occupied;
 
-        label.toggle_classname("active", is_active);
-        label.toggle_classname("occupied", !is_active && is_occupied);
+        label.toggle_classname("active", active);
+        label.toggle_classname("occupied", occupied);
     }
 }
 
@@ -45,12 +44,14 @@ pub fn workspaces() -> gtk4::Box {
 
     std::thread::spawn(move || {
         let mut listener = EventListener::new();
-        listener.add_workspace_change_handler(move |id| {
-            tx.send(match id {
+        fn handle_id(id: WorkspaceType) -> i32 {
+            match id {
                 WorkspaceType::Regular(s) => s.parse().ok().unwrap(),
                 _ => 0,
-            })
-            .unwrap();
+            }
+        }
+        listener.add_workspace_change_handler(move |id| {
+            tx.send(handle_id(id)).unwrap();
         });
         listener.start_listener().unwrap();
     });

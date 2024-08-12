@@ -47,8 +47,15 @@
         all: unset;
         @include button($flat: true, $focusable: false);
         @include label;
+        padding: 0px 5px 0px 5px;
         font-weight: 600;
-        border-radius: 8px;
         margin: 2px;
+    }
+
+    .systemindicators {
+        @include button($flat: true, $focusable: false);
+        @include label;
+        margin: 2px;
+        padding: 0px 5px 0px 5px;
     }
 }
