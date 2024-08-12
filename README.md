@@ -3,6 +3,6 @@ todo:
 - [x] active app
 - [x] datemenu button
 - [ ] temperatures
-- [ ] system indicators (quicksettings button)
-- [ ] tray
+- [x] system indicators (quicksettings button)
+- [ ] ~~tray~~ add this after all other stuff completed
 - [ ] clipboard manager
