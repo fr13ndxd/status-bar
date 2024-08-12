@@ -10,6 +10,7 @@ tokio = { version = "1.39", features = ["full"] }
 # hyprland = { path = "/home/fr13nd/Desktop/hyprland-rs" }
 # hyprland = { git = "https://github.com/hyprland-community/hyprland-rs", branch = "master" }
 hyprland = "0.4.0-alpha.2"
+quicksettings = { path = "../quicksettings" }
 
 services = { path = "../services" }
 utils = { path = "../utils" }

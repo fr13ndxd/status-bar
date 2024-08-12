@@ -36,7 +36,7 @@ fn battery_indicator() -> gtk4::Box {
     let icon = Image::new();
     let label = Label::new(None);
 
-    let hbox = Box::new(Horizontal, 0);
+    let hbox = Box::new(Horizontal, 1);
     hbox.append(&icon);
     hbox.append(&label);
     battery_changed(move |props| {
@@ -51,6 +51,11 @@ fn battery_indicator() -> gtk4::Box {
 pub fn indicators() -> Button {
     let btn = Button::new();
     btn.add_css_class("systemindicators");
+
+    let btnn = btn.clone();
+    btn.connect_clicked(move |_| {
+        quicksettings::quicksettings(btnn.clone()).show();
+    });
 
     let hbox = Box::new(Horizontal, 5);
     hbox.append(&network_indicator());
