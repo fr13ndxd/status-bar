@@ -5,7 +5,6 @@ use notify::Watcher;
 use std::fs;
 use std::path::Path;
 use std::time::Duration;
-use utils::*;
 
 #[derive(Debug)]
 pub struct BatteryProps {
@@ -20,13 +19,7 @@ where
 {
     let (tx, rx) = std::sync::mpsc::channel();
 
-    // vec![
-    // "/sys/class/power_supply/BAT0/status".to_string(),
-    // "/sys/class/power_supply/BAT0/capacity".to_string(),
-    // ],
-
     std::thread::spawn(move || {
-        use notify_debouncer_full::{new_debouncer, DebounceEventResult};
         tx.send(BatteryProps {
             percent: get_battery_capacity(),
             state: get_battery_status(),
@@ -48,7 +41,8 @@ where
                     percent: get_battery_capacity(),
                     state: get_battery_status(),
                     icon: get_battery_icon(),
-                });
+                })
+                .unwrap();
             },
             config,
         )
@@ -56,7 +50,7 @@ where
 
         for dir in dirs {
             watcher
-                .watch(&Path::new(&dir), RecursiveMode::Recursive)
+                .watch(&Path::new(&dir), RecursiveMode::NonRecursive)
                 .unwrap();
         }
 

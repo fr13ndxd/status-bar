@@ -1,6 +1,6 @@
-@import './mixins/label.scss';
-@import './mixins/button.scss';
-@import './variables.scss';
+@import '../mixins/label.scss';
+@import '../mixins/button.scss';
+@import '../variables.scss';
 
 .status-bar {
     all: unset;
@@ -54,7 +54,6 @@
 
     .systemindicators {
         @include button($flat: true, $focusable: false);
-        @include label;
         margin: 2px;
         padding: 0px 5px 0px 5px;
     }
