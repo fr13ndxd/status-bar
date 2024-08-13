@@ -23,7 +23,7 @@ where
                 let props = NetworkProps {
                     state: current_state.clone(),
                     icon: get_icon_name(),
-                    strength: current_strength.clone(),
+                    strength: current_strength,
                 };
                 tx.send(props).unwrap();
                 last_state = current_state;
@@ -47,7 +47,7 @@ pub fn state() -> String {
     let nm = network_manager::NetworkManager::new();
     match nm.get_state() {
         Ok(state) => format!("{:?}", state),
-        Err(_) => format!("error"),
+        Err(_) => "error".to_string(),
     }
 }
 
@@ -60,11 +60,11 @@ pub fn strength() -> i32 {
     let signal = String::from_utf8(singal.stdout).unwrap();
 
     for line in signal.lines() {
-        if line.starts_with("*") {
+        if line.starts_with('*') {
             let line = line
-                .strip_prefix("*")
+                .strip_prefix('*')
                 .unwrap()
-                .replace(" ", "")
+                .replace(' ', "")
                 .parse::<i32>()
                 .unwrap();
 
