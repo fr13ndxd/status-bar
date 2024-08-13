@@ -12,7 +12,7 @@ pub fn popup_window(content: Box, classname: &str, parent: Button) -> gtk4::Popo
     popover.set_parent(&parent);
 
     let popover_ptr: *const Popover = popover.as_ref() as *const _;
-    log!(Level::Info, "quicksettings popover: {:?}", popover_ptr);
+    log!(Level::Trace, "quicksettings popover: {:?}", popover_ptr);
 
     popover.set_has_arrow(false);
     popover.set_child(Some(&content));
