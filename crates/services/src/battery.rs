@@ -50,7 +50,7 @@ where
 
         for dir in dirs {
             watcher
-                .watch(&Path::new(&dir), RecursiveMode::NonRecursive)
+                .watch(Path::new(&dir), RecursiveMode::NonRecursive)
                 .unwrap();
         }
 
@@ -102,8 +102,8 @@ pub fn get_battery_icon() -> String {
 
     if (0..=100).contains(&capacity) {
         let capacity = capacity - (capacity % 10);
-        return format!("battery-level-{}{}-symbolic", capacity, status);
+        format!("battery-level-{}{}-symbolic", capacity, status)
     } else {
-        return String::from("battery-level-unknown-symbolic");
+        String::from("battery-level-unknown-symbolic")
     }
 }

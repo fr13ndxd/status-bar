@@ -11,7 +11,7 @@ use hyprland::shared::{HyprData, WorkspaceType};
 
 use utils::*;
 
-fn update_workspaces(id: i32, labels: &Vec<Label>) {
+fn update_workspaces(id: i32, labels: &[Label]) {
     let workspaces = Workspaces::get().unwrap();
 
     for (i, label) in labels.iter().enumerate() {

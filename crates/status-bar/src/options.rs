@@ -7,7 +7,7 @@ use simple_logger::SimpleLogger;
 pub fn handle_options(app: &Application) {
     app.add_main_option(
         "show-trace",
-        Char(('t' as u8).try_into().unwrap()),
+        Char(b't'.try_into().unwrap()),
         OptionFlags::NONE,
         gtk4::glib::OptionArg::None,
         "shows trace logs (default: info)",

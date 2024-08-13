@@ -18,10 +18,9 @@ pub fn temp_dir() -> PathBuf {
 
 pub fn id_to_i32(id: WorkspaceType) -> i32 {
     match id {
-        hyprland::shared::WorkspaceType::Regular(s) => s
-            .parse()
-            .ok()
-            .expect("failed to convert workspace id to i32"),
+        hyprland::shared::WorkspaceType::Regular(s) => {
+            s.parse().expect("failed to convert workspace id to i32")
+        }
         _ => 0,
     }
 }
@@ -66,11 +65,10 @@ where
         let mut debouncer = new_debouncer(
             Duration::from_millis(200),
             None,
-            move |result: DebounceEventResult| match result {
-                Ok(_) => {
+            move |result: DebounceEventResult| {
+                if result.is_ok() {
                     tx.send(()).unwrap();
                 }
-                Err(_) => (),
             },
         )
         .unwrap();
@@ -87,7 +85,7 @@ where
 
     gtk4::glib::source::idle_add_local(move || {
         std::thread::sleep(std::time::Duration::from_millis(1));
-        if let Ok(_) = rx.try_recv() {
+        if rx.try_recv().is_ok() {
             callback();
         }
         gtk4::glib::ControlFlow::Continue
@@ -107,11 +105,10 @@ where
         let mut debouncer = new_debouncer(
             Duration::from_millis(200),
             None,
-            move |result: DebounceEventResult| match result {
-                Ok(_) => {
-                    tx.send(()).unwrap();
+            move |result: DebounceEventResult| {
+                if result.is_ok() {
+                    tx.send(()).unwrap()
                 }
-                Err(_) => (),
             },
         )
         .unwrap();
@@ -130,7 +127,7 @@ where
 
     gtk4::glib::source::idle_add_local(move || {
         std::thread::sleep(std::time::Duration::from_millis(1));
-        if let Ok(_) = rx.try_recv() {
+        if rx.try_recv().is_ok() {
             callback();
         }
         gtk4::glib::ControlFlow::Continue
