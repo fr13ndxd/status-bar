@@ -1,3 +1,4 @@
+use anyhow::Result;
 use std::process::Command;
 use std::time::Duration;
 
@@ -15,10 +16,10 @@ where
 
     std::thread::spawn(move || {
         let mut last_state = state();
-        let mut last_strength = strength();
+        let mut last_strength = strength().expect("couldnt get network strength");
         loop {
             let current_state = state();
-            let current_strength = strength();
+            let current_strength = strength().expect("couldnt get network strength");
             if last_state != current_state || last_strength != current_strength {
                 let props = NetworkProps {
                     state: current_state.clone(),
@@ -51,41 +52,34 @@ pub fn state() -> String {
     }
 }
 
-pub fn strength() -> i32 {
+pub fn strength() -> Result<i32> {
     let singal = Command::new("nmcli")
         .args(["-f", "IN-USE,SIGNAL", "dev", "wifi"])
-        .output()
-        .unwrap();
+        .output()?;
 
     let signal = String::from_utf8(singal.stdout).unwrap();
 
     for line in signal.lines() {
         if line.starts_with('*') {
-            let line = line
-                .strip_prefix('*')
-                .unwrap()
-                .replace(' ', "")
-                .parse::<i32>()
-                .unwrap();
-
-            return line;
+            let line = line[1..].trim().parse::<i32>().unwrap();
+            return Ok(line);
         }
     }
 
-    -1
+    Ok(-1)
 }
 
 pub fn get_icon_name() -> String {
     let state = state();
     if state == "ConnectedGlobal" {
-        return match strength() {
-            0..=20 => String::from("network-wireless-signal-none-symbolic"),
-            21..=40 => String::from("network-wireless-signal-weak-symbolic"),
-            41..=60 => String::from("network-wireless-signal-ok-symbolic"),
-            61..=80 => String::from("network-wireless-signal-good-symbolic"),
-            81..=100 => String::from("network-wireless-signal-excellent-symbolic"),
-            _ => String::from("network-wireless-off-symbolic"),
-        };
+        return String::from(match strength().unwrap() {
+            0..=20 => "network-wireless-signal-none-symbolic",
+            21..=40 => "network-wireless-signal-weak-symbolic",
+            41..=60 => "network-wireless-signal-ok-symbolic",
+            61..=80 => "network-wireless-signal-good-symbolic",
+            81..=100 => "network-wireless-signal-excellent-symbolic",
+            _ => "network-wireless-off-symbolic",
+        });
     } else if state == "Connecting" {
         return String::from("network-wireless-acquiring-symbolic");
     } else if state == "Disconnected" {

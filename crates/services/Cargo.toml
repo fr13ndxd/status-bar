@@ -10,6 +10,7 @@ tokio = { version = "1.39", features = ["full"] }
 utils = { path = "../utils" }
 notify = "6.1"
 notify-debouncer-full = "0.3"
+anyhow = "1"
 
 [lints]
 workspace = true

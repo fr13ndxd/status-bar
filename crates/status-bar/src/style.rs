@@ -6,16 +6,23 @@ use std::fs::read_to_string;
 use utils::file_changed;
 use utils::{ensure_directory, exec};
 
+static mut PROVIDER: Option<CssProvider> = None;
+
 pub fn load_css() {
     let output_css = "/tmp/status-bar/";
     let output_file_css = "/tmp/status-bar/style.css";
 
     ensure_directory(output_css);
+    let display = Display::default().expect("can't get display");
 
     file_changed(
         "/home/fr13nd/Desktop/status-bar/style".to_string(),
         move || {
-            let display = Display::default().expect("can't get display");
+            unsafe {
+                if let Some(ref provider) = PROVIDER {
+                    gtk4::style_context_remove_provider_for_display(&display, provider);
+                }
+            }
             let provider = CssProvider::new();
 
             let scss = exec(
@@ -37,6 +44,10 @@ pub fn load_css() {
                 &provider,
                 STYLE_PROVIDER_PRIORITY_USER,
             );
+
+            unsafe {
+                PROVIDER = Some(provider);
+            }
         },
     );
 }

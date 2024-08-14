@@ -1,8 +1,26 @@
 use gtk4::prelude::WidgetExt;
 use hyprland::shared::WorkspaceType;
 use notify::Watcher;
+use std::fs::File;
 use std::path::Path;
 use std::{path::PathBuf, process::Command, time::Duration};
+
+pub mod vars;
+
+pub fn config() -> PathBuf {
+    std::env::home_dir()
+        .unwrap()
+        .join(".config")
+        .join("status-bar")
+}
+
+pub fn config_file() -> PathBuf {
+    config().join("config.json")
+}
+
+pub fn temp_dir() -> PathBuf {
+    gtk4::glib::tmp_dir().join(gtk4::glib::application_name().unwrap())
+}
 
 pub fn current_date() -> String {
     let format = "%H:%M - %A %e.";
@@ -10,10 +28,6 @@ pub fn current_date() -> String {
     let time = now.unwrap().format(format).unwrap();
 
     time.to_string()
-}
-
-pub fn temp_dir() -> PathBuf {
-    gtk4::glib::tmp_dir().join(gtk4::glib::application_name().unwrap())
 }
 
 pub fn id_to_i32(id: WorkspaceType) -> i32 {
@@ -42,6 +56,12 @@ impl<T: WidgetExt> WidgetOptions for T {
 pub fn ensure_directory(path: &str) {
     if !std::path::Path::new(path).exists() {
         std::fs::create_dir_all(path).unwrap();
+    }
+}
+
+pub fn ensure_file(path: &str) {
+    if !std::path::Path::new(path).exists() {
+        File::create(&path);
     }
 }
 

@@ -5,6 +5,7 @@ use gtk4_layer_shell::{Edge, LayerShell};
 use modules::{
     activeapp::active_app, date::datemenu, systemindicators::indicators, workspaces::workspaces,
 };
+use utils::vars::BAR_POSITION;
 
 mod modules;
 
@@ -32,6 +33,7 @@ fn end() -> Box {
 
 pub fn bar(app: Application) -> ApplicationWindow {
     let window = ApplicationWindow::builder().application(&app).build();
+    window.set_height_request(30);
     window.init_layer_shell();
     window.set_namespace("status-bar");
     window.add_css_class("status-bar");
@@ -43,6 +45,45 @@ pub fn bar(app: Application) -> ApplicationWindow {
     widgets.set_end_widget(Some(&end()));
 
     window.set_child(Some(&widgets));
+
+    let windoww = window.clone();
+
+    let (tx, rx) = std::sync::mpsc::channel();
+    std::thread::spawn(move || unsafe {
+        tx.send(());
+        let mut last = utils::vars::BAR_POSITION.clone().unwrap();
+        loop {
+            if last != utils::vars::BAR_POSITION.clone().unwrap() {
+                tx.send(());
+            }
+            last = utils::vars::BAR_POSITION.clone().unwrap();
+
+            std::thread::sleep(std::time::Duration::from_millis(1));
+        }
+    });
+
+    let windoww = window.clone();
+    gtk4::glib::source::idle_add_local(move || {
+        std::thread::sleep(std::time::Duration::from_millis(1));
+
+        if let Ok(_) = rx.try_recv() {
+            unsafe {
+                match BAR_POSITION.clone().unwrap().as_str() {
+                    "top" => {
+                        windoww.set_anchor(Edge::Top, true);
+                        windoww.set_anchor(Edge::Bottom, false);
+                    }
+                    "bottom" => {
+                        windoww.set_anchor(Edge::Top, false);
+                        windoww.set_anchor(Edge::Bottom, true);
+                    }
+                    _ => println!("unknown position {}", BAR_POSITION.clone().unwrap()),
+                }
+            }
+        }
+
+        gtk4::glib::ControlFlow::Continue
+    });
 
     window.set_anchor(Edge::Top, true);
     window.set_anchor(Edge::Left, true);
