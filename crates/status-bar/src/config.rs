@@ -23,8 +23,6 @@ pub fn load_config() {
 
     ensure_directory(&cfg_dir);
 
-    println!("{}", std::fs::read_to_string(&cfg_file).unwrap());
-
     let cfg: Config =
         serde_json::from_str(std::fs::read_to_string(&cfg_file).unwrap().as_str()).unwrap();
 
@@ -48,6 +46,6 @@ pub fn load_config() {
         time_format.set(cfg.time_format.clone());
         drop((bar_position, time_format));
 
-        log!(Level::Info, "Config changed: {:#?}", &cfg);
+        log!(Level::Trace, "Config changed: {:#?}", &cfg);
     });
 }
