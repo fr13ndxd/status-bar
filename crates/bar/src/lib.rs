@@ -5,6 +5,7 @@ use gtk4_layer_shell::{Edge, LayerShell};
 use modules::{
     activeapp::active_app, date::datemenu, systemindicators::indicators, workspaces::workspaces,
 };
+use utils::variable::Var;
 use utils::vars::BAR_POSITION;
 
 mod modules;
@@ -46,46 +47,21 @@ pub fn bar(app: Application) -> ApplicationWindow {
 
     window.set_child(Some(&widgets));
 
-    let windoww = window.clone();
-
-    let (tx, rx) = std::sync::mpsc::channel();
-    std::thread::spawn(move || unsafe {
-        tx.send(());
-        let mut last = utils::vars::BAR_POSITION.clone().unwrap();
-        loop {
-            if last != utils::vars::BAR_POSITION.clone().unwrap() {
-                tx.send(());
+    let windoww = fragile::Fragile::new(window.clone());
+    let mut var = utils::vars::BAR_POSITION.lock().unwrap();
+    var.connect_changed({
+        move |new| {
+            let windoww = windoww.get();
+            if !&["top", "bottom"].contains(&new.as_str()) {
+                println!("unknown bar position: {}", new);
+                return;
             }
-            last = utils::vars::BAR_POSITION.clone().unwrap();
-
-            std::thread::sleep(std::time::Duration::from_millis(1));
+            windoww.set_anchor(Edge::Top, new == "top");
+            windoww.set_anchor(Edge::Bottom, new == "bottom");
         }
     });
+    drop(var);
 
-    let windoww = window.clone();
-    gtk4::glib::source::idle_add_local(move || {
-        std::thread::sleep(std::time::Duration::from_millis(1));
-
-        if let Ok(_) = rx.try_recv() {
-            unsafe {
-                match BAR_POSITION.clone().unwrap().as_str() {
-                    "top" => {
-                        windoww.set_anchor(Edge::Top, true);
-                        windoww.set_anchor(Edge::Bottom, false);
-                    }
-                    "bottom" => {
-                        windoww.set_anchor(Edge::Top, false);
-                        windoww.set_anchor(Edge::Bottom, true);
-                    }
-                    _ => println!("unknown position {}", BAR_POSITION.clone().unwrap()),
-                }
-            }
-        }
-
-        gtk4::glib::ControlFlow::Continue
-    });
-
-    window.set_anchor(Edge::Top, true);
     window.set_anchor(Edge::Left, true);
     window.set_anchor(Edge::Right, true);
 

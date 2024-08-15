@@ -10,6 +10,7 @@ gtk4 = "0.8"
 hyprland = "0.4.0-alpha.2"
 notify = "6.1"
 notify-debouncer-full = "0.3"
+lazy_static = "1.5"
 
 [lints]
 workspace = true

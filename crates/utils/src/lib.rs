@@ -1,3 +1,4 @@
+use crate::variable::Var;
 use gtk4::prelude::WidgetExt;
 use hyprland::shared::WorkspaceType;
 use notify::Watcher;
@@ -5,6 +6,7 @@ use std::fs::File;
 use std::path::Path;
 use std::{path::PathBuf, process::Command, time::Duration};
 
+pub mod variable;
 pub mod vars;
 
 pub fn config() -> PathBuf {
@@ -23,11 +25,16 @@ pub fn temp_dir() -> PathBuf {
 }
 
 pub fn current_date() -> String {
-    let format = "%H:%M - %A %e.";
-    let now = gtk4::glib::DateTime::now_local();
-    let time = now.unwrap().format(format).unwrap();
+    unsafe {
+        let format = vars::TIME_FORMAT.lock().unwrap();
 
-    time.to_string()
+        let now = gtk4::glib::DateTime::now_local();
+        let time = now.unwrap().format(format.get().clone().as_str()).unwrap();
+
+        drop(format);
+
+        time.to_string()
+    }
 }
 
 pub fn id_to_i32(id: WorkspaceType) -> i32 {

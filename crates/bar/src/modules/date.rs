@@ -16,7 +16,7 @@ pub fn datemenu() -> Box {
 
     thread::spawn(move || loop {
         tx.send(current_date()).unwrap();
-        thread::sleep(Duration::from_secs(30));
+        thread::sleep(Duration::from_secs(1));
     });
 
     glib::source::idle_add_local(move || {
