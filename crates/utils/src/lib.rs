@@ -9,6 +9,7 @@ use std::{path::PathBuf, process::Command, time::Duration};
 pub mod variable;
 pub mod vars;
 
+#[allow(deprecated)]
 pub fn config() -> PathBuf {
     std::env::home_dir()
         .unwrap()
@@ -25,16 +26,14 @@ pub fn temp_dir() -> PathBuf {
 }
 
 pub fn current_date() -> String {
-    unsafe {
-        let format = vars::TIME_FORMAT.lock().unwrap();
+    let format = vars::TIME_FORMAT.lock().unwrap();
 
-        let now = gtk4::glib::DateTime::now_local();
-        let time = now.unwrap().format(format.get().clone().as_str()).unwrap();
+    let now = gtk4::glib::DateTime::now_local();
+    let time = now.unwrap().format(format.get().clone().as_str()).unwrap();
 
-        drop(format);
+    drop(format);
 
-        time.to_string()
-    }
+    time.to_string()
 }
 
 pub fn id_to_i32(id: WorkspaceType) -> i32 {
@@ -68,7 +67,7 @@ pub fn ensure_directory(path: &str) {
 
 pub fn ensure_file(path: &str) {
     if !std::path::Path::new(path).exists() {
-        File::create(&path);
+        File::create(&path).unwrap();
     }
 }
 

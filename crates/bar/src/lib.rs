@@ -6,7 +6,6 @@ use modules::{
     activeapp::active_app, date::datemenu, systemindicators::indicators, workspaces::workspaces,
 };
 use utils::variable::Var;
-use utils::vars::BAR_POSITION;
 
 mod modules;
 

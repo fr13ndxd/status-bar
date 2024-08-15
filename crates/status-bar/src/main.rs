@@ -2,7 +2,6 @@ use config::load_config;
 use gtk4::prelude::{ApplicationExt, ApplicationExtManual};
 use log::{log, Level};
 use style::load_css;
-use utils::variable::Variable;
 
 mod config;
 mod options;

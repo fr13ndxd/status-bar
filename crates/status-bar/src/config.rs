@@ -1,8 +1,6 @@
 use log::log;
 use log::Level;
 use serde::{Deserialize, Serialize};
-use std::path::Path;
-use std::path::PathBuf;
 use utils::{variable::Var, *};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -34,7 +32,7 @@ pub fn load_config() {
     time_format.set(cfg.time_format);
     drop((bar_position, time_format));
 
-    utils::file_changed(cfg_dir, move || unsafe {
+    utils::file_changed(cfg_dir, move || {
         let cfg: Config =
             serde_json::from_str(std::fs::read_to_string(&cfg_file).unwrap().as_str()).unwrap();
 
