@@ -1,8 +1,8 @@
 use gtk4::glib::source;
 use lazy_static::lazy_static;
-use std::process::Command;
 use std::sync::Mutex;
 use std::time::Duration;
+use std::{process::Command, sync::mpsc};
 
 use utils::variable::{Var, Variable};
 
@@ -21,21 +21,28 @@ pub fn audio_icon_changed<F>(callback: F)
 where
     F: Fn(String) + Send + Sync + 'static,
 {
+    let (tx, rx) = mpsc::channel();
     let mut audio_icon = AUDIO_ICON.lock().unwrap();
     audio_icon.connect_changed(move |new| callback(new.to_string()));
     audio_icon.set(get_audio_icon());
     drop(audio_icon);
 
-    lazy_static! {
-        static ref LAST_ICON: Mutex<String> = Mutex::new(get_audio_icon());
-    }
+    std::thread::spawn(move || {
+        let mut last_icon = get_audio_icon();
+        loop {
+            let current_icon = get_audio_icon();
+            if current_icon != last_icon {
+                tx.send(current_icon);
+            }
+            std::thread::sleep(Duration::from_millis(1));
+        }
+    });
+
     source::idle_add_local(move || {
         std::thread::sleep(Duration::from_millis(1));
-        let current_icon = get_audio_icon();
-        if current_icon != *LAST_ICON.lock().unwrap() {
+        if let Ok(current_icon) = rx.try_recv() {
             let mut audio_icon = AUDIO_ICON.lock().unwrap();
             audio_icon.set(current_icon.clone());
-            *LAST_ICON.lock().unwrap() = current_icon.clone();
             drop(audio_icon);
         }
         gtk4::glib::ControlFlow::Continue
