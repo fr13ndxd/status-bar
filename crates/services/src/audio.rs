@@ -1,10 +1,45 @@
+use gtk4::glib::source;
+use lazy_static::lazy_static;
 use std::process::Command;
+use std::sync::Mutex;
 use std::time::Duration;
+
+use utils::variable::{Var, Variable};
 
 pub struct AudioProps {
     pub is_muted: bool,
     pub volume: i32,
     pub icon: String,
+}
+
+lazy_static! {
+    pub static ref AUDIO_ICON: Mutex<Variable<String>> =
+        Mutex::new(Variable::new(get_audio_icon()));
+}
+
+pub fn audio_icon_changed<F>(callback: F)
+where
+    F: Fn(String) + Send + Sync + 'static,
+{
+    let mut audio_icon = AUDIO_ICON.lock().unwrap();
+    audio_icon.connect_changed(move |new| callback(new.to_string()));
+    audio_icon.set(get_audio_icon());
+    drop(audio_icon);
+
+    lazy_static! {
+        static ref LAST_ICON: Mutex<String> = Mutex::new(get_audio_icon());
+    }
+    source::idle_add_local(move || {
+        std::thread::sleep(Duration::from_millis(1));
+        let current_icon = get_audio_icon();
+        if current_icon != *LAST_ICON.lock().unwrap() {
+            let mut audio_icon = AUDIO_ICON.lock().unwrap();
+            audio_icon.set(current_icon.clone());
+            *LAST_ICON.lock().unwrap() = current_icon.clone();
+            drop(audio_icon);
+        }
+        gtk4::glib::ControlFlow::Continue
+    });
 }
 
 pub fn audio_changed<F>(callback: F)

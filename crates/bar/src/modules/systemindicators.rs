@@ -4,7 +4,7 @@ use gtk4::Button;
 use gtk4::Image;
 use gtk4::Label;
 use gtk4::Orientation::*;
-use services::audio::audio_changed;
+use services::audio::audio_icon_changed;
 use services::battery::battery_changed;
 use services::network::network_changed;
 
@@ -25,8 +25,9 @@ fn audio_indicator() -> gtk4::Box {
 
     let hbox = Box::new(Horizontal, 0);
     hbox.append(&icon);
-    audio_changed(move |props| {
-        icon.set_icon_name(Some(props.icon.as_str()));
+    let icon = fragile::Fragile::new(icon);
+    audio_icon_changed(move |new| {
+        icon.get().set_icon_name(Some(&new.as_str()));
     });
 
     hbox

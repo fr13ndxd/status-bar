@@ -11,6 +11,7 @@ utils = { path = "../utils" }
 notify = "6.1"
 notify-debouncer-full = "0.3"
 anyhow = "1"
+lazy_static = "1.5"
 
 [lints]
 workspace = true
