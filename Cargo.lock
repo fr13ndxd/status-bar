@@ -1062,9 +1062,11 @@ dependencies = [
 name = "quicksettings"
 version = "0.1.0"
 dependencies = [
+ "fragile",
  "gtk4",
  "gtk4-layer-shell",
  "log 0.4.22",
+ "services",
  "tokio",
 ]
 

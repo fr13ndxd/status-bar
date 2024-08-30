@@ -6,8 +6,9 @@ members = [
   "crates/bar",
 
   "crates/services",
-  "crates/utils"
-, "crates/datemenu", "crates/quicksettings"]
+  "crates/utils",
+  "crates/datemenu", "crates/quicksettings"
+]
 
 default-members = ["crates/status-bar"]
 

@@ -1,22 +1,28 @@
 .quicksettings-popover {
-    all:unset;
-    margin: 10px;
-    background: transparent;
-    min-height: 400px;
-    min-width: 300px;
-    contents {
-        all: unset;
-    }
+  all: unset;
+  margin: 10px;
+  background: transparent;
+  min-height: 400px;
+  min-width: 300px;
+
+  contents {
+    all: unset;
+  }
 }
 
 .quicksettings {
-    all: unset;
-    background: $bg;
-    border-radius: $radius + 4;
+  all: unset;
+  background: $bg;
+  border-radius: $radius + 4;
 
-    .header-button {
-        @include button;
-        margin: $spacing * 1.5;
-        padding: $spacing / 1.5;
-    }
+  .header-button {
+    @include button;
+    margin: $spacing / 1.5;
+
+    padding: $spacing / 1.5;
+  }
+
+  .sliders {
+    min-height: 200px;
+  }
 }

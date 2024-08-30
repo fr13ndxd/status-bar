@@ -3,8 +3,9 @@ use gtk4::Orientation::*;
 use gtk4::{Box, Button, Popover};
 use header::header;
 use log::{log, Level};
-
+use sliders::sliders;
 mod header;
+mod sliders;
 
 pub fn popup_window(content: Box, classname: &str, parent: Button) -> gtk4::Popover {
     let popover = gtk4::Popover::new();
@@ -21,12 +22,13 @@ pub fn popup_window(content: Box, classname: &str, parent: Button) -> gtk4::Popo
 }
 
 pub fn quicksettings(btn: Button) -> Popover {
-    let hbox = Box::new(Vertical, 0);
-    hbox.set_hexpand(true);
-    hbox.set_vexpand(true);
-    hbox.add_css_class("quicksettings");
+    let vbox = Box::new(Vertical, 0);
+    vbox.set_hexpand(true);
+    vbox.set_vexpand(true);
+    vbox.add_css_class("quicksettings");
 
-    hbox.append(&header());
+    vbox.append(&header());
+    vbox.append(&sliders());
 
-    popup_window(hbox, "quicksettings-popover", btn)
+    popup_window(vbox, "quicksettings-popover", btn)
 }

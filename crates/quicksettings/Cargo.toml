@@ -8,6 +8,8 @@ gtk4 = "0.8"
 gtk4-layer-shell = "0.3"
 tokio = { version = "1.39", features = ["full"] }
 log = "0.4"
+services = { path = "../services" }
+fragile = "2"
 
 [lints]
 workspace = true

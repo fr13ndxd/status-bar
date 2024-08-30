@@ -14,7 +14,7 @@ where
 {
     let (tx, rx) = std::sync::mpsc::channel();
 
-    std::thread::spawn(move || {
+    tokio::spawn(async move {
         let mut last_state = state();
         let mut last_strength = strength().expect("couldnt get network strength");
         loop {

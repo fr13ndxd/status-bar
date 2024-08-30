@@ -3,60 +3,62 @@
 @import '../variables.scss';
 
 .status-bar {
+  all: unset;
+  @include label;
+  background: transparentize($bg, 0.95);
+  // min-height: 20px;
+
+  .workspaces {
+    margin-left: 1px;
+    padding-left: 10px;
+
+    .w_label {
+      all: unset;
+      background-color: transparentize($fg, .8);
+      color: transparent;
+      opacity: 0.9;
+
+      margin-left: calc($spacing / 4);
+      min-height: 6pt;
+      min-width: 6pt;
+      border-radius: 10px;
+      font-size: 0px;
+      transition: 200ms;
+    }
+
+    .active {
+      background: $active-gradient;
+      min-width: 20pt;
+    }
+
+    .occupied {
+      background-color: transparentize($fg, .2);
+    }
+  }
+
+  .active-app-box {
     all: unset;
+
+    .activeapp-label {
+      @include label;
+      margin-left: 10px;
+    }
+  }
+
+  .datemenu-button {
+    all: unset;
+    @include button($flat: true, $focusable: false);
     @include label;
-    background: transparentize($bg, 0.95);
-    min-height: 20px;
+    padding: 0px 5px 0px 5px;
+    font-weight: 600;
+    margin: 2px;
+  }
 
-    .workspaces {
-        margin-left: 1px;
-        padding-left: 10px;
-        .w_label {
-            all:unset;
-            background-color: transparentize($fg, .8);
-            color: transparent;
-            opacity: 0.9;
-
-            margin-left: calc($spacing / 4);
-            min-height: 6pt;
-            min-width: 6pt;
-            border-radius: 10px;
-            font-size: 0px;
-            transition: 200ms;
-        }
-
-        .active {
-            background: $active-gradient;
-            min-width: 20pt;
-        }
-
-        .occupied {
-            background-color: transparentize($fg, .2);
-        }
-    }
-
-    .active-app-box {
-        all: unset;
-        .activeapp-label {
-            @include label;
-            margin-left: 10px;
-        }
-    }
-
-    .datemenu-button {
-        all: unset;
-        @include button($flat: true, $focusable: false);
-        @include label;
-        padding: 0px 5px 0px 5px;
-        font-weight: 600;
-        margin: 2px;
-    }
-
-    .systemindicators {
-        @include button($flat: true, $focusable: false);
-        @include label;
-        font-weight: 600;
-        margin: 2px;
-        padding: 0px 5px 0px 5px;
-    }
+  .systemindicators {
+    @include button($flat: true, $focusable: false);
+    @include label;
+    font-weight: 600;
+    margin: 2px;
+    padding: 0px 5px 0px 5px;
+  }
 }

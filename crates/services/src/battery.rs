@@ -19,7 +19,7 @@ where
 {
     let (tx, rx) = std::sync::mpsc::channel();
 
-    std::thread::spawn(move || {
+    tokio::spawn(async move {
         tx.send(BatteryProps {
             percent: get_battery_capacity(),
             state: get_battery_status(),
@@ -48,11 +48,11 @@ where
         )
         .unwrap();
 
-        for dir in dirs {
+        dirs.iter().for_each(|dir| {
             watcher
                 .watch(Path::new(&dir), RecursiveMode::NonRecursive)
-                .unwrap();
-        }
+                .unwrap()
+        });
 
         loop {
             std::thread::sleep(std::time::Duration::from_millis(200));

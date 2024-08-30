@@ -33,7 +33,7 @@ fn end() -> Box {
 
 pub fn bar(app: Application) -> ApplicationWindow {
     let window = ApplicationWindow::builder().application(&app).build();
-    window.set_height_request(30);
+    window.set_height_request(20);
     window.init_layer_shell();
     window.set_namespace("status-bar");
     window.add_css_class("status-bar");

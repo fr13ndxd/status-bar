@@ -29,14 +29,11 @@ fn audio_indicator() -> gtk4::Box {
     audio_icon_changed(move |new| {
         icon.get().set_icon_name(Some(&new.as_str()));
     });
-
     hbox
 }
-
 fn battery_indicator() -> gtk4::Box {
     let icon = Image::new();
     let label = Label::new(None);
-
     let hbox = Box::new(Horizontal, 1);
     hbox.append(&icon);
     hbox.append(&label);
@@ -45,25 +42,19 @@ fn battery_indicator() -> gtk4::Box {
         icon.set_icon_name(Some(&props.icon));
         label.set_label(percent.as_str());
     });
-
     hbox
 }
-
 pub fn indicators() -> Button {
     let btn = Button::new();
     btn.add_css_class("systemindicators");
-
     let btnn = btn.clone();
     btn.connect_clicked(move |_| {
         quicksettings::quicksettings(btnn.clone()).show();
     });
-
     let hbox = Box::new(Horizontal, 5);
     hbox.append(&network_indicator());
     hbox.append(&audio_indicator());
     hbox.append(&battery_indicator());
-
     btn.set_child(Some(&hbox));
-
     btn
 }

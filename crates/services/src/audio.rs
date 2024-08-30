@@ -27,12 +27,12 @@ where
     audio_icon.set(get_audio_icon());
     drop(audio_icon);
 
-    std::thread::spawn(move || {
-        let mut last_icon = get_audio_icon();
+    tokio::spawn(async move {
+        let last_icon = get_audio_icon();
         loop {
             let current_icon = get_audio_icon();
             if current_icon != last_icon {
-                tx.send(current_icon);
+                let _ = tx.send(current_icon);
             }
             std::thread::sleep(Duration::from_millis(1));
         }
