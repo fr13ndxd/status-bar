@@ -24,7 +24,8 @@ pub fn load_config() {
     ensure_directory(&cfg_dir);
     if !std::fs::File::open(cfg_file.clone()).is_ok() {
         let mut file = std::fs::File::create(cfg_file.clone()).unwrap();
-        file.write(r#"{ "bar": {"position": "top"}, "time_format": "%H:%M - %A %e." }"#.as_bytes());
+        let _ = file
+            .write(r#"{ "bar": {"position": "top"}, "time_format": "%H:%M - %A %e." }"#.as_bytes());
     }
 
     let cfg: Config =
