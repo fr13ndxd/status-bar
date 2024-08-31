@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use log::log;
 use log::Level;
 use serde::{Deserialize, Serialize};
@@ -20,6 +22,10 @@ pub fn load_config() {
     log!(Level::Info, "using config file: {}", cfg_file.clone());
 
     ensure_directory(&cfg_dir);
+    if !std::fs::File::open(cfg_file.clone()).is_ok() {
+        let mut file = std::fs::File::create(cfg_file.clone()).unwrap();
+        file.write(r#"{ "bar": {"position": "top"}, "time_format": "%H:%M - %A %e." }"#.as_bytes());
+    }
 
     let cfg: Config =
         serde_json::from_str(std::fs::read_to_string(&cfg_file).unwrap().as_str()).unwrap();
