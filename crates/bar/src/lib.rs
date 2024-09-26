@@ -1,9 +1,8 @@
 use gtk4::{prelude::*, Application, Orientation::*};
 use gtk4::{ApplicationWindow, Box, CenterBox};
 use gtk4_layer_shell::{Edge, LayerShell};
-#[allow(unused_imports)]
 use modules::{
-    activeapp::active_app, date::datemenu, systemindicators::indicators, workspaces::workspaces,
+    date::datemenu, screenrecord::indicator, systemindicators::indicators, workspaces::workspaces,
 };
 use utils::variable::Var;
 
@@ -26,6 +25,7 @@ fn center() -> Box {
 
 fn end() -> Box {
     let hbox = Box::new(Horizontal, 0);
+    hbox.append(&indicator());
     hbox.append(&indicators());
 
     hbox

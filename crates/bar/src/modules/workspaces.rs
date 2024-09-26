@@ -5,9 +5,10 @@ use hyprland::data::Workspace;
 use hyprland::data::Workspaces;
 use hyprland::event_listener::EventListener;
 use hyprland::shared::HyprDataActive;
+use hyprland::shared::WorkspaceType;
 use std::sync::mpsc;
 
-use hyprland::shared::{HyprData, WorkspaceType};
+use hyprland::shared::HyprData;
 
 use utils::*;
 
@@ -33,15 +34,14 @@ pub fn workspaces() -> gtk4::Box {
             let label = gtk4::Label::new(None);
             label.set_vexpand(true);
             label.set_valign(gtk4::Align::Center);
-
-            hbox.append(&label);
             label.add_css_class("w_label");
+            hbox.append(&label);
+
             label
         })
         .collect();
 
     let (tx, rx) = mpsc::channel();
-
     std::thread::spawn(move || {
         let mut listener = EventListener::new();
         fn handle_id(id: WorkspaceType) -> i32 {

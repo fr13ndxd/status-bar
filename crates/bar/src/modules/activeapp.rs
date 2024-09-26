@@ -22,7 +22,7 @@ pub fn active_app() -> gtk4::Box {
     std::thread::spawn(move || {
         let mut listener = EventListener::new();
         listener.add_active_window_change_handler(move |data| {
-            tx.send(data.unwrap().window_class).unwrap();
+            tx.send(data).unwrap();
         });
         listener.start_listener().unwrap();
     });
@@ -30,7 +30,7 @@ pub fn active_app() -> gtk4::Box {
     gtk4::glib::source::idle_add_local(move || {
         std::thread::sleep(std::time::Duration::from_millis(1));
         if let Ok(test) = rx.try_recv() {
-            activeapp_label.set_label(test.as_str());
+            activeapp_label.set_label(test.unwrap().window_title.as_str());
         }
         glib::ControlFlow::Continue
     });

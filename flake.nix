@@ -8,11 +8,9 @@
   outputs = { self, flake-utils, naersk, nixpkgs }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = (import nixpkgs) {
-          inherit system;
-        };
+        pkgs = (import nixpkgs) { inherit system; };
 
-        naersk' = pkgs.callPackage naersk {};
+        naersk' = pkgs.callPackage naersk { };
 
       in rec {
         # For `nix build` & `nix run`:
@@ -20,13 +18,32 @@
           src = ./.;
           name = "status-bar";
           version = "0.1.0";
-          buildInputs = with pkgs; [ wrapGAppsHook4 rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg ];
+          buildInputs = with pkgs; [
+            wrapGAppsHook4
+            rustc
+            cargo
+            pkg-config
+            gtk4-layer-shell
+            gtk4
+            dbus
+            librsvg
+          ];
+          postInstall = "cp -r style $tmp/status-bar/style";
         };
 
         # For `nix develop` (optional, can be skipped):
         devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ adwaita-icon-theme rustc cargo pkg-config gtk4-layer-shell gtk4 dbus librsvg dart-sass ];
+          nativeBuildInputs = with pkgs; [
+            adwaita-icon-theme
+            rustc
+            cargo
+            pkg-config
+            gtk4-layer-shell
+            gtk4
+            dbus
+            librsvg
+            dart-sass
+          ];
         };
-      }
-    );
+      });
 }

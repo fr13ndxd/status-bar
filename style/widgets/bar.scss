@@ -54,6 +54,14 @@
     margin: 2px;
   }
 
+  .recording_indicator {
+    background: transparent;
+
+    .close_button {
+      color: red;
+    }
+  }
+
   .systemindicators {
     @include button($flat: true, $focusable: false);
     @include label;

@@ -36,7 +36,7 @@ fn volume_slider() -> gtk4::Scale {
 }
 
 pub fn sliders() -> Box {
-    let hbox = Box::new(Horizontal, 0);
+    let hbox = Box::new(Vertical, 0);
     hbox.add_css_class("sliders");
 
     hbox.append(&volume_slider());
