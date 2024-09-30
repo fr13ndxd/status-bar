@@ -1,15 +1,12 @@
 use gtk4::prelude::*;
 use gtk4::Box;
 use gtk4::Button;
-use gtk4::Image;
-use gtk4::Label;
 use gtk4::Orientation::*;
-use std::fs;
-use utils::WidgetOptions;
 
 fn is_process_running() -> bool {
     let s = sysinfo::System::new_all();
     for process in s.processes_by_exact_name("wf-recorder".as_ref()) {
+        let _ = process;
         return true;
     }
 
@@ -30,11 +27,11 @@ pub fn indicator() -> Box {
 
     tokio::spawn(async move {
         let mut last = is_process_running();
-        tx.send(last);
+        let _ = tx.send(last);
         loop {
             let current = is_process_running();
             if last != current {
-                tx.send(current);
+                let _ = tx.send(current);
                 last = current;
             }
             std::thread::sleep(std::time::Duration::from_millis(1));

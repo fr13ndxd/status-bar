@@ -28,7 +28,8 @@
             dbus
             librsvg
           ];
-          postInstall = "cp -r style $tmp/status-bar/style";
+          postInstall =
+            "mkdir /tmp/status-bar; cp -r style /tmp/status-bar/style";
         };
 
         # For `nix develop` (optional, can be skipped):
