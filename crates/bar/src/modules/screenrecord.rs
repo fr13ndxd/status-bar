@@ -34,14 +34,14 @@ pub fn indicator() -> Box {
                 let _ = tx.send(current);
                 last = current;
             }
-            std::thread::sleep(std::time::Duration::from_millis(1));
+            std::thread::sleep(std::time::Duration::from_millis(1000));
         }
     });
 
     let hbx = hbox.clone();
     gtk4::glib::source::idle_add_local(move || {
         if let Ok(is_recording) = rx.try_recv() {
-            std::thread::sleep(std::time::Duration::from_millis(1));
+            std::thread::sleep(std::time::Duration::from_millis(500));
             if is_recording {
                 hbx.show();
             } else {
