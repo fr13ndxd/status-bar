@@ -22,7 +22,6 @@ fn network_indicator() -> gtk4::Box {
 
 fn audio_indicator() -> gtk4::Box {
     let icon = Image::new();
-
     let hbox = Box::new(Horizontal, 0);
     hbox.append(&icon);
     let icon = fragile::Fragile::new(icon);

@@ -10,9 +10,10 @@ todo:
 
 [~/.config/status-bar/config.json]
 ```json
-{
+{ 
     "bar": {
-      "position": "top" // or bottom
-    }
+        "position": "top"
+    },
+    "time_format": "%H:%M - %A %e." 
 }
 ```
