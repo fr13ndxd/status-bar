@@ -11,6 +11,7 @@ pub const Workspace = struct {
     lastwindowtitle: []u8,
 };
 
+// TODO: make this shit better
 pub const Workspaces = struct {
     pub fn getCurrent(allocator: std.mem.Allocator) !Workspace {
         var pathbuf: [100:0]u8 = undefined;

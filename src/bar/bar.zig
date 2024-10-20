@@ -14,6 +14,7 @@ const GApplication = gio.Application;
 
 pub fn bar(allocator: std.mem.Allocator, app: *GApplication) *Window {
     var window = ApplicationWindow.new(app.tryInto(Application).?).into(Window);
+    window.setDefaultSize(1, 30);
     gls.gtk_layer_init_for_window(@ptrCast(window));
     gls.gtk_layer_set_namespace(@ptrCast(window), "status-bar");
     const wwindow = window.into(gtk.Widget);
@@ -21,9 +22,7 @@ pub fn bar(allocator: std.mem.Allocator, app: *GApplication) *Window {
     gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_TOP, 1);
     gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_LEFT, 1);
     gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_RIGHT, 1);
-    gls.gtk_layer_set_exclusive_zone(@ptrCast(window), 1);
-
-    window.setDefaultSize(10, 30);
+    gls.gtk_layer_set_exclusive_zone(@ptrCast(window), 30);
 
     const workspacesWidget = workspaces.workspaces(allocator);
 

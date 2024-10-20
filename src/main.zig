@@ -24,6 +24,8 @@ pub fn main() !void {
 }
 
 fn activate(app: *GApplication, allocator: std.mem.Allocator) void {
+    const start = std.time.Instant.now() catch @panic("wtf happened");
+
     const display = gtk.gdk.Display.getDefault().?;
     const provider = gtk.CssProvider.new();
     const argv = [_][]const u8{
@@ -45,4 +47,7 @@ fn activate(app: *GApplication, allocator: std.mem.Allocator) void {
 
     const statusbar = bar.bar(allocator, app);
     statusbar.present();
+
+    const end = std.time.Instant.now() catch @panic("wtf happened");
+    std.log.info("Bar loaded in {d}ms\n", .{end.since(start) / std.time.ns_per_ms});
 }
