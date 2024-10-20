@@ -1,0 +1,16 @@
+.{
+    .name = "zig",
+    .version = "0.0.0",
+
+    .dependencies = .{
+        .gtk = .{
+            .url = "https://github.com/DerryAlex/zig-gir-ffi/releases/download/0.10.2/gtk4.tar.gz",
+            .hash = "1220ee3e898557547c4096198a4451c264f1af01f34143344e0e8794c4d8da815b2e",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
