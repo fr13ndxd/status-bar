@@ -1,7 +1,0 @@
-{
-  "1220ee3e898557547c4096198a4451c264f1af01f34143344e0e8794c4d8da815b2e": {
-    "name": "gtk",
-    "url": "https://github.com/DerryAlex/zig-gir-ffi/releases/download/0.10.2/gtk4.tar.gz",
-    "hash": "sha256-5m8bdC+Oi2FmVZ0Xs+bPbWt0XmzZOrNoHY5HrAN7KqQ="
-  }
-}
