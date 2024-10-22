@@ -28,14 +28,16 @@ fn shouldUpdateWorkspacesThread(hyprland_ws: hyprland.Workspaces) !void {
             currentWorkspaces = try hyprland_ws.get();
             shouldUpdateWorkspaces = true;
         }
-        std.time.sleep(10 * std.time.ns_per_ms);
+        std.time.sleep(50 * std.time.ns_per_ms);
     }
 }
 
 fn checkForWorkspaceChanges(labels: []*Widget) bool {
     mutex.lock();
     defer mutex.unlock();
+    std.time.sleep(1 * std.time.ns_per_ms);
     if (shouldUpdateWorkspaces) {
+        shouldUpdateWorkspaces = false;
         for (labels, 1..) |label, i| {
             const active = lastActiveWorkspace.id == i;
             const occupied = blk: {
@@ -48,7 +50,6 @@ fn checkForWorkspaceChanges(labels: []*Widget) bool {
             utils.toggleClassnameForWidget(label, "active", active);
             utils.toggleClassnameForWidget(label, "occupied", occupied);
         }
-        shouldUpdateWorkspaces = false;
     }
 
     return true;

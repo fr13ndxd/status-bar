@@ -1,8 +1,10 @@
 @import './variables.scss';
+@import './mixins/button.scss';
+@import './mixins/label.scss';
 
 .bar {
   all: unset;
-  /* @include label; */
+  @include label;
   background: transparentize($bg, 0.95);
 
   .workspaces {
@@ -32,6 +34,18 @@
 
     .occupied {
       background-color: transparentize($fg, .2);
+    }
+  }
+
+  .datemenu {
+    button {
+      all: unset;
+      @include button($flat: true, $focusable: false);
+      @include label;
+      padding: 0px 5px 0px 5px;
+      font-weight: 600;
+      font-size: 9.7pt;
+      margin: 2px;
     }
   }
 }

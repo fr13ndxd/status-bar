@@ -5,12 +5,33 @@ const gls = @cImport({
 });
 
 const workspaces = @import("workspaces.zig");
+const datemenu = @import("datemenu.zig");
 
 const Window = gtk.Window;
+const Box = gtk.Box;
+const CenterBox = gtk.CenterBox;
 const Application = gtk.Application;
 const ApplicationWindow = gtk.ApplicationWindow;
 const gio = gtk.gio;
 const GApplication = gio.Application;
+
+pub fn start(allocator: std.mem.Allocator) *Box {
+    const hbox = Box.new(.horizontal, 5);
+
+    const workspacesWidget = workspaces.workspaces(allocator) catch @panic("failed to create ws widget");
+    hbox.append(workspacesWidget.into(gtk.Widget));
+
+    return hbox;
+}
+
+pub fn center() *Box {
+    const hbox = Box.new(.horizontal, 5);
+
+    const dmenu = datemenu.datemenu() catch @panic("failed to create datemenu button");
+    hbox.append(dmenu.into(gtk.Widget));
+
+    return hbox;
+}
 
 pub fn bar(allocator: std.mem.Allocator, app: *GApplication) *Window {
     var window = ApplicationWindow.new(app.tryInto(Application).?).into(Window);
@@ -24,9 +45,11 @@ pub fn bar(allocator: std.mem.Allocator, app: *GApplication) *Window {
     gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_RIGHT, 1);
     gls.gtk_layer_set_exclusive_zone(@ptrCast(window), 30);
 
-    const workspacesWidget = workspaces.workspaces(allocator) catch @panic("failed to create ws widget");
+    const cbox = CenterBox.new();
+    cbox.setStartWidget(start(allocator).into(gtk.Widget));
+    cbox.setCenterWidget(center().into(gtk.Widget));
 
-    window.setChild(workspacesWidget.into(gtk.Widget));
+    window.setChild(cbox.into(gtk.Widget));
 
     return window;
 }

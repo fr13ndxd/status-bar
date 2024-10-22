@@ -31,7 +31,7 @@
           dontConfigure = true;
           dontInstall = true;
           buildPhase = ''
-            zig build install --cache-dir $(pwd)/.zig-cache --global-cache-dir $(pwd)/.cache --prefix $out
+            zig build install --cache-dir $(pwd)/.zig-cache --global-cache-dir $(pwd)/.cache --prefix $out -Doptimize=ReleaseFast
           '';
           postPatch = ''
             mkdir .cache
