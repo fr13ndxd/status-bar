@@ -1,6 +1,8 @@
 const std = @import("std");
 const gtk = @import("gtk");
 
+const stdout = std.io.getStdOut().writer();
+
 const gio = gtk.gio;
 const GApplication = gio.Application;
 const ApplicationWindow = gtk.ApplicationWindow;
@@ -49,5 +51,5 @@ fn activate(app: *GApplication, allocator: std.mem.Allocator) void {
     statusbar.present();
 
     const end = std.time.Instant.now() catch @panic("wtf happened");
-    std.log.info("Bar loaded in {d}ms\n", .{end.since(start) / std.time.ns_per_ms});
+    stdout.print("info: Bar loaded in {d}ms\n", .{end.since(start) / std.time.ns_per_ms}) catch @panic("");
 }

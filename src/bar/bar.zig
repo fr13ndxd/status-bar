@@ -24,7 +24,7 @@ pub fn bar(allocator: std.mem.Allocator, app: *GApplication) *Window {
     gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_RIGHT, 1);
     gls.gtk_layer_set_exclusive_zone(@ptrCast(window), 30);
 
-    const workspacesWidget = workspaces.workspaces(allocator);
+    const workspacesWidget = workspaces.workspaces(allocator) catch @panic("failed to create ws widget");
 
     window.setChild(workspacesWidget.into(gtk.Widget));
 

@@ -22,6 +22,7 @@
           version = "0.0.0";
           src = ./.;
           nativeBuildInputs = with pkgs; [
+            # zig-overlay.packages.${system}.master
             pkgs.zig
             pkg-config
             gtk4
@@ -40,6 +41,7 @@
 
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
+            # zig-overlay.packages.${system}.master
             pkgs.zig
             pkg-config
             gtk4
