@@ -1,5 +1,6 @@
 const std = @import("std");
 const gtk = @import("gtk");
+const utils = @import("utils.zig");
 
 const stdout = std.io.getStdOut().writer();
 
@@ -28,25 +29,7 @@ pub fn main() !void {
 fn activate(app: *GApplication, allocator: std.mem.Allocator) void {
     const start = std.time.Instant.now() catch @panic("wtf happened");
 
-    const display = gtk.gdk.Display.getDefault().?;
-    const provider = gtk.CssProvider.new();
-    const argv = [_][]const u8{
-        "dart-sass",
-        "/home/fr13nd/Desktop/statusbar-zig/style/main.scss",
-        "/tmp/statusbar/style.css",
-    };
-    var child = std.process.Child.init(&argv, allocator);
-    child.stdout_behavior = .Ignore;
-    child.stderr_behavior = .Ignore;
-
-    child.spawn() catch @panic("failed to init css");
-    _ = child.wait() catch @panic("failed to init css");
-
-    const path = gtk.gio.File.newForPath("/tmp/statusbar/style.css");
-    provider.loadFromFile(path);
-
-    gtk.StyleContext.addProviderForDisplay(display, provider.into(gtk.StyleProvider), gtk.STYLE_PROVIDER_PRIORITY_USER);
-
+    utils.loadCss(allocator) catch @panic("failed to load css");
     const statusbar = bar.bar(allocator, app);
     statusbar.present();
 

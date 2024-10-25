@@ -2,6 +2,7 @@ const gtk = @import("gtk");
 const std = @import("std");
 
 const utils = @import("../utils.zig");
+const datemenu_wn = @import("../windows/datemenu.zig");
 
 const Box = gtk.Box;
 const Button = gtk.Button;
@@ -24,8 +25,11 @@ pub fn datemenu() !*Box {
     const timeButton = Button.new();
     _ = updateTimeButton(timeButton);
     _ = gtk.glib.timeoutAddSeconds(gtk.glib.PRIORITY_DEFAULT, 5, updateTimeButton, .{timeButton});
-
     hbox.append(timeButton.into(Widget));
+
+    const datemenu_window = try datemenu_wn.datemenu(timeButton);
+    std.debug.print("here\n", .{});
+    _ = datemenu_window; // autofix
 
     return hbox;
 }
