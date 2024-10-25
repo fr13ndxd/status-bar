@@ -5,10 +5,7 @@
     zig-overlay.url = "github:mitchellh/zig-overlay";
     zig-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
-    zls-master = {
-      url = "github:zigtools/zls";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    zls-master.url = "github:zigtools/zls";
 
     flake-utils.url = "github:numtide/flake-utils";
   };
@@ -48,8 +45,8 @@
           nativeBuildInputs = with pkgs; [
             # zig-overlay.packages.${system}.master
             pkgs.zig
-            pkgs.zls
-            # zls-master.packages.${system}.default
+            # pkgs.zls
+            zls-master.packages.${system}.default
             pkg-config
             gtk4
             gtk4-layer-shell
