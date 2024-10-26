@@ -1,0 +1,24 @@
+@import '../mixins/calendar.scss';
+
+/* datemenu_window is the popover */
+.datemenu_window {
+  background: transparent;
+  margin-top: 20px;
+
+  contents {
+    all: unset;
+  }
+
+  .datemenu {
+    all: unset;
+    border-radius: 5px;
+    padding: 10px;
+    background: $widget-bg;
+    min-height: 210px;
+    min-width: 210px;
+
+    calendar {
+      @include calendar;
+    }
+  }
+}

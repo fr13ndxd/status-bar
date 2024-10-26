@@ -8,7 +8,7 @@ const Box = gtk.Box;
 const Button = gtk.Button;
 const Widget = gtk.Widget;
 
-pub fn updateTimeButton(button: *Button) bool {
+fn updateTimeButton(button: *Button) bool {
     const time = gtk.glib.DateTime.newNowLocal() orelse return false;
     const formatedTime = time.format("%H:%M - %A %e.") orelse return false;
 
@@ -17,10 +17,14 @@ pub fn updateTimeButton(button: *Button) bool {
     return true;
 }
 
+fn timeButtonClicked(_: *Button, datemenu_win: *gtk.Popover) void {
+    datemenu_win.popup();
+}
+
 pub fn dateMenu() !*Box {
     const hbox = Box.new(.horizontal, 5);
     const whbox = hbox.into(Widget);
-    whbox.addCssClass("datemenu");
+    whbox.addCssClass("datemenu_button");
 
     const timeButton = Button.new();
     _ = updateTimeButton(timeButton);
@@ -28,8 +32,8 @@ pub fn dateMenu() !*Box {
     hbox.append(timeButton.into(Widget));
 
     const datemenu_window = try datemenu_wn.datemenu(timeButton);
-    std.debug.print("here\n", .{});
-    _ = datemenu_window; // autofix
+
+    _ = timeButton.connectClicked(timeButtonClicked, .{datemenu_window}, .{});
 
     return hbox;
 }

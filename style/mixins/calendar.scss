@@ -1,0 +1,13 @@
+@mixin calendar {
+  @include widget;
+  all: unset;
+  padding: $padding*2 $padding*2 0;
+  font-size: 0.9em;
+  padding: .2em;
+
+  header {
+    background-color: transparent;
+    border: none;
+    color: transparentize($fg, 0.5);
+  }
+}
