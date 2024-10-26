@@ -30,8 +30,8 @@ fn activate(app: *GApplication, allocator: std.mem.Allocator) void {
     const start = std.time.Instant.now() catch @panic("wtf happened");
 
     utils.loadCss(allocator) catch @panic("failed to load css");
-    const statusbar = bar.bar(allocator, app);
-    statusbar.present();
+    const status_bar = bar.bar(allocator, app) orelse return;
+    status_bar.present();
 
     const end = std.time.Instant.now() catch @panic("wtf happened");
     stdout.print("info: Bar loaded in {d}ms\n", .{end.since(start) / std.time.ns_per_ms}) catch @panic("");

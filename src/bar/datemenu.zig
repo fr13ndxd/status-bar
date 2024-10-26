@@ -9,15 +9,15 @@ const Button = gtk.Button;
 const Widget = gtk.Widget;
 
 pub fn updateTimeButton(button: *Button) bool {
-    const time = gtk.glib.DateTime.newNowLocal();
-    const formatedTime = time.?.format("%H:%M - %A %e.").?;
+    const time = gtk.glib.DateTime.newNowLocal() orelse return false;
+    const formatedTime = time.format("%H:%M - %A %e.") orelse return false;
 
     button.setLabel(formatedTime);
 
     return true;
 }
 
-pub fn datemenu() !*Box {
+pub fn dateMenu() !*Box {
     const hbox = Box.new(.horizontal, 5);
     const whbox = hbox.into(Widget);
     whbox.addCssClass("datemenu");

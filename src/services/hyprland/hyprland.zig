@@ -6,12 +6,11 @@ pub const Workspace = struct {
     monitor: []u8,
     monitorID: i32,
     windows: i32,
-    hasfullscreen: bool,
     lastwindow: []u8,
+    hasfullscreen: bool,
     lastwindowtitle: []u8,
 };
 
-// TODO: make this shit better
 pub const Workspaces = struct {
     allocator: std.mem.Allocator,
     socketpath: [:0]const u8,
@@ -30,10 +29,10 @@ pub const Workspaces = struct {
         _ = try stream.write("j/activeworkspace");
 
         var buf: [1024]u8 = undefined;
-        // j/activeworkspace has some '170' bytes at the end (they are not needed)
-        const activeworkspace = try stream.reader().readUntilDelimiterOrEof(buf[0..], 170);
+        // j/workspaces has some '170' bytes at the end (they are not needed)
+        const active_workspace = try stream.reader().readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NothingRead;
 
-        const parsed = try std.json.parseFromSlice(Workspace, self.allocator, activeworkspace.?, .{ .ignore_unknown_fields = true });
+        const parsed = try std.json.parseFromSlice(Workspace, self.allocator, active_workspace, .{ .ignore_unknown_fields = true });
         defer parsed.deinit();
 
         return parsed.value;
@@ -45,11 +44,12 @@ pub const Workspaces = struct {
 
         var buf: [1024]u8 = undefined;
         // j/activeworkspace has some '170' bytes at the end (they are not needed)
-        const activeworkspace = try stream.reader().readUntilDelimiterOrEof(buf[0..], 170);
+        const active_workspace = try stream.reader().readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NoActiveWorkspace;
 
-        const parsed = try std.json.parseFromSlice([]Workspace, self.allocator, activeworkspace.?, .{ .ignore_unknown_fields = true });
+        const parsed = try std.json.parseFromSlice([]Workspace, self.allocator, active_workspace, .{ .ignore_unknown_fields = true });
         defer parsed.deinit();
 
+        // if not, general protection err
         const workspaces = self.allocator.dupe(Workspace, parsed.value);
 
         return workspaces;
@@ -59,8 +59,8 @@ pub const Workspaces = struct {
         var env_map = try std.process.getEnvMap(allocator);
         defer env_map.deinit();
 
-        const his = env_map.get("HYPRLAND_INSTANCE_SIGNATURE") orelse @panic("failed to get hyprland instance signature (is hyprland running?)");
-        const xdg_runtime_dir = env_map.get("XDG_RUNTIME_DIR") orelse @panic("failed to get xdg_runtime_dir");
+        const his = env_map.get("HYPRLAND_INSTANCE_SIGNATURE") orelse return error.HyprlandInstanceSignatureFail;
+        const xdg_runtime_dir = env_map.get("XDG_RUNTIME_DIR") orelse return error.XdgRuntimeFail;
 
         // $XDG_RUNTIME_DIR/hypr/[HIS]/.socket.sock
         const path = switch (sockettype) {

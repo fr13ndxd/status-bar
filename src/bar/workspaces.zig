@@ -25,12 +25,13 @@ fn shouldUpdateWorkspacesThread() !void {
     defer hyprland_ws.deinit();
 
     const socketpath = try hyprland.Workspaces.getHyprlandSocketPath(allocator, .socket2);
+    defer allocator.free(socketpath);
     const stream = try std.net.connectUnixSocket(socketpath);
     defer stream.close();
     const reader = stream.reader();
 
     while (true) {
-        var buf: [128]u8 = undefined;
+        var buf: [256]u8 = undefined;
         const event = try reader.readUntilDelimiter(buf[0..], '\n');
         // workspace changed event
         // workspace>>{id}

@@ -5,7 +5,7 @@ const gls = @cImport({
 });
 
 const workspaces = @import("workspaces.zig");
-const datemenu = @import("datemenu.zig");
+const date_menu = @import("datemenu.zig");
 
 const Window = gtk.Window;
 const Box = gtk.Box;
@@ -18,8 +18,11 @@ const GApplication = gio.Application;
 pub fn start(allocator: std.mem.Allocator) *Box {
     const hbox = Box.new(.horizontal, 5);
 
-    const workspacesWidget = workspaces.workspaces(allocator) catch @panic("failed to create ws widget");
-    hbox.append(workspacesWidget.into(gtk.Widget));
+    const workspaces_widget = workspaces.workspaces(allocator) catch |err| {
+        std.debug.print("{}\n", .{err});
+        @panic("failed to create ws widget");
+    };
+    hbox.append(workspaces_widget.into(gtk.Widget));
 
     return hbox;
 }
@@ -27,23 +30,26 @@ pub fn start(allocator: std.mem.Allocator) *Box {
 pub fn center() *Box {
     const hbox = Box.new(.horizontal, 5);
 
-    const dmenu = datemenu.datemenu() catch @panic("failed to create datemenu button");
+    const dmenu = date_menu.dateMenu() catch @panic("failed to create datemenu button");
     hbox.append(dmenu.into(gtk.Widget));
 
     return hbox;
 }
 
-pub fn bar(allocator: std.mem.Allocator, app: *GApplication) *Window {
-    var window = ApplicationWindow.new(app.tryInto(Application).?).into(Window);
+pub fn bar(allocator: std.mem.Allocator, app: *GApplication) ?*Window {
+    var window = ApplicationWindow.new(app.tryInto(Application) orelse return null).into(Window);
     window.setDefaultSize(1, 30);
-    gls.gtk_layer_init_for_window(@ptrCast(window));
-    gls.gtk_layer_set_namespace(@ptrCast(window), "status-bar");
-    const wwindow = window.into(gtk.Widget);
-    wwindow.addCssClass("bar");
-    gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_TOP, 1);
-    gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_LEFT, 1);
-    gls.gtk_layer_set_anchor(@ptrCast(window), gls.GTK_LAYER_SHELL_EDGE_RIGHT, 1);
-    gls.gtk_layer_set_exclusive_zone(@ptrCast(window), 30);
+
+    const gtk_window: [*]gls.GtkWindow = @ptrCast(window);
+    gls.gtk_layer_init_for_window(gtk_window);
+    gls.gtk_layer_set_namespace(gtk_window, "status-bar");
+    const widget = window.into(gtk.Widget);
+    widget.addCssClass("bar");
+
+    gls.gtk_layer_set_anchor(gtk_window, gls.GTK_LAYER_SHELL_EDGE_TOP, 1);
+    gls.gtk_layer_set_anchor(gtk_window, gls.GTK_LAYER_SHELL_EDGE_LEFT, 1);
+    gls.gtk_layer_set_anchor(gtk_window, gls.GTK_LAYER_SHELL_EDGE_RIGHT, 1);
+    gls.gtk_layer_set_exclusive_zone(gtk_window, 30);
 
     const cbox = CenterBox.new();
     cbox.setStartWidget(start(allocator).into(gtk.Widget));
