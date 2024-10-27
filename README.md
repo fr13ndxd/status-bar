@@ -1,3 +1,6 @@
+> [!NOTE]  
+> This branch will be deleted soon
+
 todo:
 - [x] workspace widget
 - [x] active app
