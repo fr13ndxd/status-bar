@@ -1,3 +1,6 @@
+> [!NOTE]  
+> This branch will be deleted soon
+
 ### Simple status bar written in rust and gtk4.
 
 Current status:
