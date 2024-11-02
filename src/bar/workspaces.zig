@@ -37,6 +37,7 @@ fn shouldUpdateWorkspacesThread() !void {
         // workspace>>{id}
         if (std.mem.startsWith(u8, event, "workspace>>")) {
             const index = std.mem.indexOf(u8, event, ">>").? + 2;
+            // TODO: use channels
             mutex.lock();
             defer mutex.unlock();
             currentWorkspaceId = try std.fmt.parseInt(i32, event[index..], 10);

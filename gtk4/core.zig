@@ -1,0 +1,1 @@
+/home/fr13nd/Desktop/zig/gtk4-test/zig-gir-ffi/manual/core.zig

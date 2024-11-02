@@ -15,7 +15,6 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         zig = zig-overlay.packages.${system}.master;
-        # zig = pkgs.zig;
       in rec {
         formatter = pkgs.nixpkgs-fmt;
         packages.default = packages.status-bar;
@@ -24,8 +23,7 @@
           version = "0.0.0";
           src = ./.;
           nativeBuildInputs = with pkgs; [
-            # zig-overlay.packages.${system}.master
-            pkgs.zig
+            zig-overlay.packages.${system}.master
             pkg-config
             gtk4
             gtk4-layer-shell
@@ -37,15 +35,12 @@
           '';
           postPatch = ''
             mkdir .cache
-            ln -s ${pkgs.callPackage ./deps.nix { }} .cache/p
           '';
         };
 
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            # zig-overlay.packages.${system}.master
-            pkgs.zig
-            # pkgs.zls
+            zig-overlay.packages.${system}.master
             zls-master.packages.${system}.default
             pkg-config
             gtk4
