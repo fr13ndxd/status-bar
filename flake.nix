@@ -27,6 +27,7 @@
             pkg-config
             gtk4
             gtk4-layer-shell
+            autoPatchelfHook
           ];
           dontConfigure = true;
           dontInstall = true;

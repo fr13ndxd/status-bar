@@ -8,7 +8,7 @@
         //     .hash = "1220ee3e898557547c4096198a4451c264f1af01f34143344e0e8794c4d8da815b2e",
         // },
         .gtk = .{
-            .path = "./gtk4",
+            .path = "gtk4",
         },
     },
     .paths = .{
