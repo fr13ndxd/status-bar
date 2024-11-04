@@ -28,7 +28,9 @@
             gtk4
             gtk4-layer-shell
             autoPatchelfHook
+            librsvg
           ];
+          buildInputs = with pkgs; [ librsvg ];
           dontConfigure = true;
           dontInstall = true;
           buildPhase = ''
@@ -46,7 +48,9 @@
             pkg-config
             gtk4
             gtk4-layer-shell
+            librsvg
           ];
+          buildInputs = with pkgs; [ librsvg ];
         };
       });
 }

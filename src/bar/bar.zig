@@ -6,6 +6,7 @@ const gls = @cImport({
 
 const workspaces = @import("workspaces.zig");
 const date_menu = @import("datemenu.zig");
+const quicksettings = @import("quicksettings.zig");
 
 const Window = gtk.Window;
 const Box = gtk.Box;
@@ -36,6 +37,15 @@ pub fn center() *Box {
     return hbox;
 }
 
+pub fn end(allocator: std.mem.Allocator) *Box {
+    const hbox = Box.new(.horizontal, 5);
+
+    const quicksettings_button = quicksettings.quicksettings(allocator) catch @panic("failed to create quicksettings button");
+
+    hbox.append(quicksettings_button.into(gtk.Widget));
+    return hbox;
+}
+
 pub fn bar(allocator: std.mem.Allocator, app: *GApplication) ?*Window {
     var window = ApplicationWindow.new(app.tryInto(Application) orelse return null).into(Window);
     window.setDefaultSize(1, 30);
@@ -54,6 +64,7 @@ pub fn bar(allocator: std.mem.Allocator, app: *GApplication) ?*Window {
     const cbox = CenterBox.new();
     cbox.setStartWidget(start(allocator).into(gtk.Widget));
     cbox.setCenterWidget(center().into(gtk.Widget));
+    cbox.setEndWidget(end(allocator).into(gtk.Widget));
 
     window.setChild(cbox.into(gtk.Widget));
 
