@@ -1,0 +1,110 @@
+.bar {
+  all: unset;
+  font-family: Ubuntu Nerd Font;
+  font-weight: 550;
+  font-size: 10pt;
+  background: rgba(30, 30, 45, 0.05);
+  -gtk-icon-size: 14.5px;
+}
+.bar .workspaces {
+  margin-left: 1px;
+  padding-left: 10px;
+  margin-top: 11px;
+  margin-bottom: 11px;
+}
+.bar .workspaces .wlabel {
+  all: unset;
+  background-color: rgba(231, 224, 232, 0.2);
+  color: transparent;
+  opacity: 0.9;
+  margin-left: 2.25pt;
+  min-height: 6pt;
+  min-width: 6pt;
+  border-radius: 10px;
+  font-size: 0px;
+  transition: 200ms;
+}
+.bar .workspaces .active {
+  background: linear-gradient(to right, #d6bbfb, rgb(202.3833333333, 167.7333333333, 249.8666666667));
+  min-width: 20pt;
+}
+.bar .workspaces .occupied {
+  background-color: rgba(231, 224, 232, 0.8);
+}
+.bar .datemenu_button button {
+  all: unset;
+  all: unset;
+  transition: 200ms;
+  border-radius: 9px;
+  color: #e7e0e8;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  font-family: Ubuntu Nerd Font;
+  font-weight: 550;
+  font-size: 10pt;
+  padding: 0px 5px 0px 5px;
+  font-weight: 600;
+  font-size: 9.7pt;
+  margin: 2px;
+}
+.bar .datemenu_button button:hover {
+  box-shadow: inset 0 0 0 0px rgba(149, 142, 153, 0.04);
+  background-color: rgba(231, 224, 232, 0.154);
+  color: rgb(249.1333333333, 247.4222222222, 249.3777777778);
+}
+.bar .datemenu_button button:active, .bar .datemenu_button button.on, .bar .datemenu_button button.active, .bar .datemenu_button button:checked {
+  box-shadow: inset 0 0 0 0px rgba(149, 142, 153, 0.04);
+  background-image: linear-gradient(to right, #d6bbfb, rgb(202.3833333333, 167.7333333333, 249.8666666667));
+  background-color: #d6bbfb;
+  color: #3b255a;
+}
+.bar .datemenu_button button:active:hover, .bar .datemenu_button button.on:hover, .bar .datemenu_button button.active:hover, .bar .datemenu_button button:checked:hover {
+  box-shadow: inset 0 0 0 0px rgba(149, 142, 153, 0.04), inset 0 0 0 99px rgba(231, 224, 232, 0.154);
+}
+.bar .datemenu_button button:disabled {
+  box-shadow: none;
+  background-color: transparent;
+  color: rgba(231, 224, 232, 0.3);
+}
+.bar .quicksettings_button {
+  margin-right: 10px;
+}
+.bar .quicksettings_button button {
+  all: unset;
+  all: unset;
+  transition: 200ms;
+  border-radius: 9px;
+  color: #e7e0e8;
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  font-family: Ubuntu Nerd Font;
+  font-weight: 550;
+  font-size: 10pt;
+  padding: 0px 5px 0px 5px;
+  font-weight: 600;
+  font-size: 9.7pt;
+  margin: 2px;
+}
+.bar .quicksettings_button button:hover {
+  box-shadow: inset 0 0 0 0px rgba(149, 142, 153, 0.04);
+  background-color: rgba(231, 224, 232, 0.154);
+  color: rgb(249.1333333333, 247.4222222222, 249.3777777778);
+}
+.bar .quicksettings_button button:active, .bar .quicksettings_button button.on, .bar .quicksettings_button button.active, .bar .quicksettings_button button:checked {
+  box-shadow: inset 0 0 0 0px rgba(149, 142, 153, 0.04);
+  background-image: linear-gradient(to right, #d6bbfb, rgb(202.3833333333, 167.7333333333, 249.8666666667));
+  background-color: #d6bbfb;
+  color: #3b255a;
+}
+.bar .quicksettings_button button:active:hover, .bar .quicksettings_button button.on:hover, .bar .quicksettings_button button.active:hover, .bar .quicksettings_button button:checked:hover {
+  box-shadow: inset 0 0 0 0px rgba(149, 142, 153, 0.04), inset 0 0 0 99px rgba(231, 224, 232, 0.154);
+}
+.bar .quicksettings_button button:disabled {
+  box-shadow: none;
+  background-color: transparent;
+  color: rgba(231, 224, 232, 0.3);
+}
+
+/*# sourceMappingURL=style.css.map */
