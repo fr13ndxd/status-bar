@@ -1,4 +1,6 @@
-const gtk = @import("gtk");
+const gi = @import("gi");
+const gtk = gi.Gtk;
+const glib = gi.GLib;
 const std = @import("std");
 
 const utils = @import("../utils.zig");
@@ -9,7 +11,7 @@ const Button = gtk.Button;
 const Widget = gtk.Widget;
 
 fn updateTimeButton(button: *Button) bool {
-    const time = gtk.glib.DateTime.newNowLocal() orelse return false;
+    const time = glib.DateTime.newNowLocal() orelse return false;
     const formatedTime = time.format("%H:%M - %A %e.") orelse return false;
 
     button.setLabel(formatedTime);
@@ -28,12 +30,14 @@ pub fn dateMenu() !*Box {
 
     const timeButton = Button.new();
     _ = updateTimeButton(timeButton);
-    _ = gtk.glib.timeoutAddSeconds(gtk.glib.PRIORITY_DEFAULT, 5, updateTimeButton, .{timeButton});
+    // _ = glib.timeoutAddSeconds(glib.PRIORITY_DEFAULT, 5, .init(updateTimeButton, timeButton));
     hbox.append(timeButton.into(Widget));
 
     const datemenu_window = try datemenu_wn.datemenu(timeButton);
+    _ = datemenu_window;
 
-    _ = timeButton.connectClicked(timeButtonClicked, .{datemenu_window}, .{});
+    // _ = timeButton.connectClicked(timeButtonClicked, .{datemenu_window}, .{});
+    // _ = timeButton._signals.clicked.connect(.init(timeButtonClicked, .{datemenu_window}), .{});
 
     return hbox;
 }

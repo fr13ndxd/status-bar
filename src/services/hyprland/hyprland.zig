@@ -30,9 +30,18 @@ pub const Workspaces = struct {
 
         var buf: [1024]u8 = undefined;
         // j/workspaces has some '170' bytes at the end (they are not needed)
-        const active_workspace = try stream.reader().readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NothingRead;
+        // const active_workspace = try stream.reader(buf[0..]).readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NothingRead;
+        var reader = stream.reader(&buf).file_reader;
+        _ = try reader.read(&buf);
 
-        const parsed = try std.json.parseFromSlice(Workspace, self.allocator, active_workspace, .{ .ignore_unknown_fields = true });
+        const string_new = buf[0..std.mem.indexOfScalar(u8, &buf, 170).?];
+
+        std.debug.print("{s}", .{string_new});
+
+        const parsed = try std.json.parseFromSlice(Workspace, self.allocator, string_new, .{
+            .ignore_unknown_fields = true,
+            .max_value_len = std.mem.indexOfScalar(u8, &buf, 170),
+        });
         defer parsed.deinit();
 
         return parsed.value;
@@ -44,9 +53,19 @@ pub const Workspaces = struct {
 
         var buf: [1024]u8 = undefined;
         // j/activeworkspace has some '170' bytes at the end (they are not needed)
-        const active_workspace = try stream.reader().readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NoActiveWorkspace;
+        // const active_workspace = try stream.reader(buf[0..]).readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NoActiveWorkspace;
+        //
+        var reader = stream.reader(&buf).file_reader;
+        _ = try reader.read(&buf);
 
-        const parsed = try std.json.parseFromSlice([]Workspace, self.allocator, active_workspace, .{ .ignore_unknown_fields = true });
+        const string_new = buf[0..std.mem.indexOfScalar(u8, &buf, 170).?];
+
+        std.debug.print("{s}", .{string_new});
+
+        const parsed = try std.json.parseFromSlice([]Workspace, self.allocator, string_new, .{
+            .ignore_unknown_fields = true,
+            .max_value_len = std.mem.indexOfScalar(u8, &buf, 170),
+        });
         defer parsed.deinit();
 
         // if not, general protection err
@@ -64,8 +83,8 @@ pub const Workspaces = struct {
 
         // $XDG_RUNTIME_DIR/hypr/[HIS]/.socket.sock
         const path = switch (sockettype) {
-            .socket => try std.fmt.allocPrintZ(allocator, "{s}/hypr/{s}/.socket.sock", .{ xdg_runtime_dir, his }),
-            .socket2 => try std.fmt.allocPrintZ(allocator, "{s}/hypr/{s}/.socket2.sock", .{ xdg_runtime_dir, his }),
+            .socket => try std.fmt.allocPrintSentinel(allocator, "{s}/hypr/{s}/.socket.sock", .{ xdg_runtime_dir, his }, 0),
+            .socket2 => try std.fmt.allocPrintSentinel(allocator, "{s}/hypr/{s}/.socket2.sock", .{ xdg_runtime_dir, his }, 0),
         };
 
         return path;

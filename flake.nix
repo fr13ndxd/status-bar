@@ -14,7 +14,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        zig = zig-overlay.packages.${system}.master;
+        # zig = zig-overlay.packages.${system}.master;
       in rec {
         formatter = pkgs.nixpkgs-fmt;
         packages.default = packages.status-bar;
@@ -23,7 +23,7 @@
           version = "0.0.0";
           src = ./.;
           nativeBuildInputs = with pkgs; [
-            zig-overlay.packages.${system}.master
+            # zig-overlay.packages.${system}.master
             pkg-config
             gtk4
             gtk4-layer-shell
@@ -44,8 +44,10 @@
 
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            zig-overlay.packages.${system}.master
-            zls-master.packages.${system}.default
+            # zig-overlay.packages.${system}.master
+            zls
+            zig_0_15
+            # zls-master.packages.${system}.default
             pkg-config
             gtk4
             gtk4-layer-shell

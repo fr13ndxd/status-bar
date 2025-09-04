@@ -1,14 +1,17 @@
 const std = @import("std");
-const gtk = @import("gtk");
+const gi = @import("gi");
+const gtk = gi.Gtk;
 const utils = @import("utils.zig");
 
-const stdout = std.io.getStdOut().writer();
+var stdout_file = std.fs.File.stdout().writer(&.{});
+const stdout = &stdout_file.interface;
 
-const gio = gtk.gio;
+const gio = gi.Gio;
 const GApplication = gio.Application;
 const ApplicationWindow = gtk.ApplicationWindow;
 const Application = gtk.Application;
 const Window = gtk.Window;
+const Object = gi.GObject.Object;
 
 pub const gi_configs: gtk.core.Configs = .{
     .disable_deprecated = false,
@@ -16,17 +19,19 @@ pub const gi_configs: gtk.core.Configs = .{
 const bar = @import("bar/bar.zig");
 
 pub fn main() !void {
+    var app = Application.new("org.status-bar", .{}).into(GApplication);
+    defer app.into(Object).unref();
+    _ = app._signals.activate.connect(.init(activate, .{}), .{});
+    // _ = app.connectActivate(activate, .{allocator}, .{});
+    const args = std.os.argv;
+    _ = app.run(@ptrCast(args));
+}
+
+fn activate(app: *GApplication) void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
     defer _ = gpa.deinit();
 
-    var app = Application.new("org.status-bar", .{}).into(GApplication);
-    defer app.__call("unref", .{});
-    _ = app.connectActivate(activate, .{allocator}, .{});
-    _ = app.run(std.os.argv);
-}
-
-fn activate(app: *GApplication, allocator: std.mem.Allocator) void {
     const start = std.time.Instant.now() catch @panic("wtf happened");
 
     utils.loadCss(allocator) catch @panic("failed to load css");

@@ -1,4 +1,5 @@
-const gtk = @import("gtk");
+const gi = @import("gi");
+const gtk = gi.Gtk;
 const std = @import("std");
 
 const Box = gtk.Box;

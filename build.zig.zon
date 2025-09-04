@@ -1,14 +1,11 @@
 .{
-    .name = "status-bar",
+    .name = .status_bar,
     .version = "0.0.0",
+    .fingerprint = 0xa890dc08376fe6b4,
 
     .dependencies = .{
-        // .gtk = .{
-        //     .url = "https://github.com/DerryAlex/zig-gir-ffi/releases/download/0.10.2/gtk4.tar.gz",
-        //     .hash = "1220ee3e898557547c4096198a4451c264f1af01f34143344e0e8794c4d8da815b2e",
-        // },
-        .gtk = .{
-            .path = "gtk4",
+        .gi = .{
+            .path = "gi",
         },
     },
     .paths = .{

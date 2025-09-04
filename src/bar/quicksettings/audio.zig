@@ -1,5 +1,7 @@
 const std = @import("std");
-const gtk = @import("gtk");
+const gi = @import("gi");
+const gtk = gi.Gtk;
+const glib = gi.GLib;
 
 const Audio = @import("../../services/audio/audio.zig").Audio;
 const Image = gtk.Image;
@@ -23,7 +25,7 @@ fn updateAudioThread(allocator: std.mem.Allocator) !void {
 
             should_update_audio = true;
         }
-        std.time.sleep(500 * std.time.ns_per_ms);
+        std.Thread.sleep(500 * std.time.ns_per_ms);
     }
 }
 
@@ -41,7 +43,7 @@ pub fn audioIcon(allocator: std.mem.Allocator) !*Image {
     const wimg = img.into(gtk.Widget);
     wimg.setHalign(.center);
     wimg.setValign(.center);
-    _ = gtk.glib.idleAdd(gtk.glib.PRIORITY_LOW, updateAudioIcon, .{img});
+    _ = glib.idleAdd(glib.PRIORITY_LOW, .init(updateAudioIcon, .{img}));
 
     (try std.Thread.spawn(.{}, updateAudioThread, .{allocator})).detach();
     return img;

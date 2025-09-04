@@ -6,14 +6,20 @@ pub fn build(b: *std.Build) void {
 
     const exe = b.addExecutable(.{
         .name = "status-bar",
-        .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
-        .link_libc = true,
+        // .root_source_file = b.path("src/main.zig"),
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/main.zig"),
+            .target = target,
+            .optimize = optimize,
+            .link_libc = true,
+        }),
+        // .target = target,
+        // .optimize = optimize,
+        // .link_libc = true,
     });
 
-    const gtk = b.dependency("gtk", .{});
-    exe.root_module.addImport("gtk", gtk.module("gtk"));
+    const gtk = b.dependency("gi", .{});
+    exe.root_module.addImport("gi", gtk.module("gi"));
     exe.linkSystemLibrary("gtk4-layer-shell");
     exe.linkSystemLibrary("gtk4");
 

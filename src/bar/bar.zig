@@ -1,4 +1,5 @@
-const gtk = @import("gtk");
+const gi = @import("gi");
+const gtk = gi.Gtk;
 const std = @import("std");
 const gls = @cImport({
     @cInclude("gtk4-layer-shell/gtk4-layer-shell.h");
@@ -13,7 +14,7 @@ const Box = gtk.Box;
 const CenterBox = gtk.CenterBox;
 const Application = gtk.Application;
 const ApplicationWindow = gtk.ApplicationWindow;
-const gio = gtk.gio;
+const gio = gi.Gio;
 const GApplication = gio.Application;
 
 pub fn start(allocator: std.mem.Allocator) *Box {

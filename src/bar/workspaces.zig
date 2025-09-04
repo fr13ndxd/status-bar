@@ -1,4 +1,6 @@
-const gtk = @import("gtk");
+const gi = @import("gi");
+const gtk = gi.Gtk;
+const glib = gi.GLib;
 const std = @import("std");
 
 const utils = @import("../utils.zig");
@@ -12,6 +14,8 @@ var currentWorkspaceId: i32 = undefined;
 var currentWorkspaces: []hyprland.Workspace = undefined;
 var shouldUpdateWorkspaces = true;
 var mutex = std.Thread.Mutex{};
+
+var labels: [7]*Widget = undefined;
 
 /// this function should be run on new thread
 /// when workspace is updated, it sets the [lastactiveWorkspace, currentWorkspaces] vars
@@ -28,30 +32,30 @@ fn shouldUpdateWorkspacesThread() !void {
     defer allocator.free(socketpath);
     const stream = try std.net.connectUnixSocket(socketpath);
     defer stream.close();
-    const reader = stream.reader();
+
+    var buf: [256]u8 = undefined;
 
     while (true) {
-        var buf: [256]u8 = undefined;
-        const event = try reader.readUntilDelimiter(buf[0..], '\n');
+        _ = stream.reader(buf[0..]);
         // workspace changed event
         // workspace>>{id}
-        if (std.mem.startsWith(u8, event, "workspace>>")) {
-            const index = std.mem.indexOf(u8, event, ">>").? + 2;
+        if (std.mem.startsWith(u8, &buf, "workspace>>")) {
+            const index = std.mem.indexOf(u8, &buf, ">>").? + 2;
             // TODO: use channels
             mutex.lock();
             defer mutex.unlock();
-            currentWorkspaceId = try std.fmt.parseInt(i32, event[index..], 10);
+            currentWorkspaceId = try std.fmt.parseInt(i32, buf[index..], 10);
             currentWorkspaces = try hyprland_ws.get();
             shouldUpdateWorkspaces = true;
         }
-        std.time.sleep(1 * std.time.ns_per_ms);
+        std.Thread.sleep(1 * std.time.ns_per_ms);
     }
 }
 
-fn checkForWorkspaceChanges(labels: []*Widget) bool {
+fn checkForWorkspaceChanges() bool {
     mutex.lock();
     defer mutex.unlock();
-    std.time.sleep(10 * std.time.ns_per_ms);
+    std.Thread.sleep(10 * std.time.ns_per_ms);
     if (!shouldUpdateWorkspaces) return true;
 
     shouldUpdateWorkspaces = false;
@@ -83,7 +87,6 @@ pub fn workspaces(allocator: std.mem.Allocator) !*Box {
     const ws_thread = try std.Thread.spawn(.{}, shouldUpdateWorkspacesThread, .{});
     ws_thread.detach();
 
-    var labels: [7]*Widget = undefined;
     for (0..7) |i| {
         const label = Label.new(" ");
         const wlabel = label.into(Widget);
@@ -92,8 +95,8 @@ pub fn workspaces(allocator: std.mem.Allocator) !*Box {
         hbox.append(wlabel);
     }
 
-    _ = checkForWorkspaceChanges(&labels);
-    _ = gtk.glib.idleAdd(gtk.glib.PRIORITY_LOW, checkForWorkspaceChanges, .{try allocator.dupe(*Widget, &labels)});
+    _ = checkForWorkspaceChanges();
+    _ = glib.idleAdd(glib.PRIORITY_LOW, .init(checkForWorkspaceChanges, .{}));
 
     return hbox;
 }
