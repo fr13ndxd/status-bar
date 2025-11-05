@@ -32,13 +32,16 @@ fn updateAudioThread(allocator: std.mem.Allocator) !void {
 fn updateAudioIcon(icon: *Image) bool {
     if (should_update_audio) {
         should_update_audio = false;
-        icon.setFromIconName(&audio_icon);
+        const newicon = std.heap.page_allocator.dupeZ(u8, &audio_icon) catch "error";
+        // defer std.heap.page_allocator.free(newicon);
+        icon.setFromIconName(newicon);
     }
 
     return true;
 }
 
 pub fn audioIcon(allocator: std.mem.Allocator) !*Image {
+    @memset(audio_icon[0..], 0);
     const img = Image.new();
     const wimg = img.into(gtk.Widget);
     wimg.setHalign(.center);

@@ -31,8 +31,13 @@ pub const Workspaces = struct {
         var buf: [1024]u8 = undefined;
         // j/workspaces has some '170' bytes at the end (they are not needed)
         // const active_workspace = try stream.reader(buf[0..]).readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NothingRead;
-        var reader = stream.reader(&buf).file_reader;
-        _ = try reader.read(&buf);
+        // _ = stream.reader(&buf).file_reader.read(&buf);
+        var reader = stream.reader(&buf);
+        const interface = reader.interface();
+        _ = try interface.readSliceShort(&buf);
+        // std.Io.Reader.readSliceAll(reader, &buf);
+        // std.Io.Reader.readSliceAll(, buffer: []u8)
+        // std.debug.print("buf: {s}\n\n", .{buf});
 
         const string_new = buf[0..std.mem.indexOfScalar(u8, &buf, 170).?];
 
@@ -40,7 +45,7 @@ pub const Workspaces = struct {
 
         const parsed = try std.json.parseFromSlice(Workspace, self.allocator, string_new, .{
             .ignore_unknown_fields = true,
-            .max_value_len = std.mem.indexOfScalar(u8, &buf, 170),
+            // .max_value_len = std.mem.indexOfScalar(u8, &buf, 170),
         });
         defer parsed.deinit();
 
@@ -55,8 +60,12 @@ pub const Workspaces = struct {
         // j/activeworkspace has some '170' bytes at the end (they are not needed)
         // const active_workspace = try stream.reader(buf[0..]).readUntilDelimiterOrEof(buf[0..], 170) orelse return error.NoActiveWorkspace;
         //
-        var reader = stream.reader(&buf).file_reader;
-        _ = try reader.read(&buf);
+
+        var reader = stream.reader(&buf);
+        const interface = reader.interface();
+        _ = try interface.readSliceShort(&buf);
+        // _ = stream.reader(&buf).interface.readSliceAll(&buf);
+        // _ = try reader.read(&buf);
 
         const string_new = buf[0..std.mem.indexOfScalar(u8, &buf, 170).?];
 
@@ -64,7 +73,7 @@ pub const Workspaces = struct {
 
         const parsed = try std.json.parseFromSlice([]Workspace, self.allocator, string_new, .{
             .ignore_unknown_fields = true,
-            .max_value_len = std.mem.indexOfScalar(u8, &buf, 170),
+            // .max_value_len = std.mem.indexOfScalar(u8, &buf, 170),
         });
         defer parsed.deinit();
 
@@ -72,6 +81,7 @@ pub const Workspaces = struct {
         const workspaces = self.allocator.dupe(Workspace, parsed.value);
 
         return workspaces;
+        // return parsed.value;
     }
 
     pub fn getHyprlandSocketPath(allocator: std.mem.Allocator, sockettype: socketType) ![:0]u8 {
@@ -82,10 +92,13 @@ pub const Workspaces = struct {
         const xdg_runtime_dir = env_map.get("XDG_RUNTIME_DIR") orelse return error.XdgRuntimeFail;
 
         // $XDG_RUNTIME_DIR/hypr/[HIS]/.socket.sock
+        // try std.fmt.allocPrintSentinel(gpa: Allocator, comptime fmt: []const u8, args: anytype, comptime sentinel: u8)
         const path = switch (sockettype) {
             .socket => try std.fmt.allocPrintSentinel(allocator, "{s}/hypr/{s}/.socket.sock", .{ xdg_runtime_dir, his }, 0),
             .socket2 => try std.fmt.allocPrintSentinel(allocator, "{s}/hypr/{s}/.socket2.sock", .{ xdg_runtime_dir, his }, 0),
         };
+
+        // std.debug.print("path: {s}", .{path});
 
         return path;
     }

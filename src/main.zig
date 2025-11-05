@@ -3,8 +3,9 @@ const gi = @import("gi");
 const gtk = gi.Gtk;
 const utils = @import("utils.zig");
 
-var stdout_file = std.fs.File.stdout().writer(&.{});
-const stdout = &stdout_file.interface;
+var stdout_buffer: [1024]u8 = undefined;
+var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+const stdout = &stdout_writer.interface;
 
 const gio = gi.Gio;
 const GApplication = gio.Application;

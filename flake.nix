@@ -30,30 +30,35 @@
             wrapGAppsHook4
             autoPatchelfHook
             librsvg
+            zig
           ];
           buildInputs = with pkgs; [ librsvg ];
           dontConfigure = true;
           dontInstall = true;
           buildPhase = ''
-            zig build install --cache-dir $(pwd)/.zig-cache --global-cache-dir $(pwd)/.cache --prefix $out -Doptimize=ReleaseFast
+            zig build install --cache-dir $(pwd)/.zig-cache --global-cache-dir $ZIG_GLOBAL_CACHE_DIR --prefix $out -Doptimize=Debug
           '';
           postPatch = ''
-            mkdir .cache
+            ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
+            export ZIG_GLOBAL_CACHE_DIR
+            echo $ZIG_GLOBAL_CACHE_DIR
+            ln -s ${pkgs.callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+            ls -a $ZIG_GLOBAL_CACHE
           '';
         };
 
         devShell = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
             # zig-overlay.packages.${system}.master
-            zls
-            zig_0_15
-            # zls-master.packages.${system}.default
+            # zls
+            zig
+            zls-master.packages.${system}.default
             pkg-config
             gtk4
             gtk4-layer-shell
             librsvg
           ];
-          buildInputs = with pkgs; [ librsvg ];
+          buildInputs = with pkgs; [ librsvg pulseaudio ];
         };
       });
 }

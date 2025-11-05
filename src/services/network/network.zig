@@ -1,4 +1,6 @@
 const std = @import("std");
+const gi = @import("gi");
+const gio = gi.Gio;
 
 const state = enum { connecting, connected, disconnected, unknown };
 
@@ -48,16 +50,7 @@ pub const Network = struct {
     }
 
     pub fn getNetworkState(self: Network) !state {
-        const argv = [_][]const u8{ "nmcli", "-e", "no", "-c", "no", "-t", "-f", "STATE", "general" };
-        const result = try std.process.Child.run(.{
-            .allocator = self.allocator,
-            .argv = &argv,
-        });
-        const stdout = result.stdout;
-
-        if (std.mem.eql(u8, stdout, "connected\n")) return state.connected;
-        if (std.mem.eql(u8, stdout, "connecting\n")) return state.connecting;
-        if (std.mem.eql(u8, stdout, "disconnected\n")) return state.disconnected;
+        _ = self;
         return state.unknown;
     }
 
@@ -69,8 +62,10 @@ pub const Network = struct {
         });
 
         var stdout = result.stdout;
+        defer self.allocator.free(result.stdout);
+        defer self.allocator.free(result.stderr);
 
-        if (std.mem.indexOfScalar(u8, result.stdout, '*')) |star_index| {
+        if (std.mem.indexOfScalar(u8, stdout, '*')) |star_index| {
             stdout = stdout[star_index + 2 ..];
             const newline_index = std.mem.indexOfScalar(u8, stdout[0..], 10).?;
             stdout = stdout[0..newline_index];

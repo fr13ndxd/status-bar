@@ -5,7 +5,8 @@
 
     .dependencies = .{
         .gi = .{
-            .path = "gi",
+            .url = "https://github.com/DerryAlex/zig-gir-ffi/releases/download/0.12.0%2Brc1/gi.tar.gz",
+            .hash = "gi-0.12.0-YzYLXzukPQBHOYG80AFLda1fK83Z95GzomKFCP9Z2j-m",
         },
     },
     .paths = .{

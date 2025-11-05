@@ -36,40 +36,60 @@ fn shouldUpdateWorkspacesThread() !void {
     var buf: [256]u8 = undefined;
 
     while (true) {
-        _ = stream.reader(buf[0..]);
-        // workspace changed event
-        // workspace>>{id}
-        if (std.mem.startsWith(u8, &buf, "workspace>>")) {
-            const index = std.mem.indexOf(u8, &buf, ">>").? + 2;
-            // TODO: use channels
+        var reader = stream.reader(&buf);
+        const interface = reader.interface();
+        _ = try interface.readSliceShort(&buf);
+        const wsevent_index = std.mem.indexOf(u8, &buf, "workspace>>") orelse 0;
+        std.debug.print("workspace changed!!! \"{any}\"\n", .{buf[wsevent_index + 11 .. wsevent_index + 12]});
+        // const index = std.mem.indexOf(u8, &buf, ">>").? + 2;
+        // TODO: use channels
+        {
             mutex.lock();
             defer mutex.unlock();
-            currentWorkspaceId = try std.fmt.parseInt(i32, buf[index..], 10);
+            currentWorkspaceId = try std.fmt.parseInt(i32, buf[wsevent_index + 11 .. wsevent_index + 12], 10);
+            std.debug.print("workspace id: {d}", .{currentWorkspaceId});
             currentWorkspaces = try hyprland_ws.get();
+            // what idiot put this here
+            // defer hyprland_ws.allocator.free(currentWorkspaces);
             shouldUpdateWorkspaces = true;
+            std.debug.print("updated workspaces", .{});
+            // if (buf[0] != 170) {
+            //     std.debug.print("{any}\n", .{buf});
+            // }
         }
-        std.Thread.sleep(1 * std.time.ns_per_ms);
+        std.Thread.sleep(100 * std.time.ns_per_ms);
     }
 }
 
 fn checkForWorkspaceChanges() bool {
+    std.Thread.sleep(10 * std.time.ns_per_ms);
     mutex.lock();
     defer mutex.unlock();
-    std.Thread.sleep(10 * std.time.ns_per_ms);
     if (!shouldUpdateWorkspaces) return true;
+
+    std.debug.print("labels.len={d}, currentWorkspaces.len={d}\n", .{ labels.len, currentWorkspaces.len });
 
     shouldUpdateWorkspaces = false;
     for (labels, 1..) |label, i| {
+        const wlabel = label.into(Widget);
         const active = currentWorkspaceId == i;
-        const occupied = blk: {
-            for (currentWorkspaces) |ws| {
-                if (ws.id == i) break :blk true;
+        // _ = label;
+        // _ = active;
+        var occupied = false;
+        std.debug.print("currentWorkspaces ptr={*}, len={d}\n", .{ currentWorkspaces.ptr, currentWorkspaces.len });
+        for (currentWorkspaces) |ws| {
+            // std.debug.print("{d}, ", .{ws.id});
+            if (ws.id == i) {
+                occupied = true;
+                // std.debug.print("{d}\n", .{ws.id});
+                break;
             }
-            break :blk false;
-        };
+        }
+        std.debug.print("cws len: {d}\n", .{currentWorkspaces.len});
+        // std.debug.print("updated workspaces", .{});
 
-        utils.toggleClassnameForWidget(label, "active", active);
-        utils.toggleClassnameForWidget(label, "occupied", occupied);
+        utils.toggleClassnameForWidget(wlabel, "active", active);
+        utils.toggleClassnameForWidget(wlabel, "occupied", occupied);
     }
     return true;
 }
@@ -83,6 +103,10 @@ pub fn workspaces(allocator: std.mem.Allocator) !*Box {
     defer hyprland_workspaces.deinit();
     currentWorkspaceId = (try hyprland_workspaces.getCurrent()).id;
     currentWorkspaces = try hyprland_workspaces.get();
+    // defer {
+    //     hyprland_workspaces.allocator.free(currentWorkspaceId);
+    //     hyprland_workspaces.allocator.free(currentWorkspaces);
+    // }
 
     const ws_thread = try std.Thread.spawn(.{}, shouldUpdateWorkspacesThread, .{});
     ws_thread.detach();

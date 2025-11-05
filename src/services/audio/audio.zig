@@ -21,23 +21,29 @@ pub const Audio = struct {
     }
 
     pub fn isMuted(self: Audio) !bool {
+        _ = self;
         const argv = [_][]const u8{ "pactl", "get-sink-mute", "@DEFAULT_SINK@" };
         const result = try std.process.Child.run(.{
-            .allocator = self.allocator,
+            .allocator = std.heap.page_allocator,
             .argv = &argv,
         });
         const stdout = result.stdout;
+        // defer self.allocator.free(result.stdout);
+        // defer self.allocator.free(result.stderr);
 
         return std.mem.indexOf(u8, stdout, "yes") != null;
     }
 
     pub fn getVolume(self: Audio) !i32 {
+        _ = self;
         const argv = [_][]const u8{ "pactl", "get-sink-volume", "@DEFAULT_SINK@" };
         const result = try std.process.Child.run(.{
-            .allocator = self.allocator,
+            .allocator = std.heap.page_allocator,
             .argv = &argv,
         });
         var stdout = result.stdout;
+        // defer self.allocator.free(result.stdout);
+        // defer self.allocator.free(result.stderr);
 
         const index = std.mem.indexOfScalar(u8, stdout, '%') orelse return 0;
 
